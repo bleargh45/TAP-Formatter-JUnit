@@ -270,6 +270,7 @@ sub _get_testcase_name {
 sub _get_testsuite_name {
     my $self = shift;
     my $name = $self->name;
+    $name =~ s{^\./}{};
     $name =~ s{^t/}{};
     return _clean_to_java_class_name($name);
 }
