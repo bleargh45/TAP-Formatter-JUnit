@@ -7,7 +7,7 @@ use TAP::Formatter::JUnit::Session;
 use base qw(TAP::Formatter::Console);
 use Class::Field qw(field);
 
-our $VERSION = '0.01';
+our $VERSION = '0.02_01';
 
 field 'testsuites'  => [];
 
@@ -112,8 +112,8 @@ IMHO that's ok as you've now got the data in two parsable formats).
 Timing information is included in the JUnit XML, I<if> you specified C<--timer>
 when you ran F<prove>.
 
-The JUnit output generated is partial to being grokked by
-L<Hudson|http://hudson.dev.java.net/>.  That's the build tool I'm using at the
+The JUnit output generated is partial to being grokked by Hudson
+(L<http://hudson.dev.java.net/>).  That's the build tool I'm using at the
 moment and needed to be able to generate JUnit output for.
 
 =head1 METHODS
