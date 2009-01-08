@@ -1,0 +1,6 @@
+Revision history for Perl extension TAP::Formatter::JUnit.
+
+0.01    Wed Jan  7 22:06 PST 2009
+    - initial version
+    - had this sitting around on my HD for several months and am (finally)
+      getting around to uploading it to CPAN

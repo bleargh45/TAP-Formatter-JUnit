@@ -1,0 +1,25 @@
+---
+name: TAP-Formatter-JUnit
+version: 0.01
+author:
+  - Graham TerMarsch (cpan@howlingfrog.com)
+abstract: Harness output delegate for JUnit output
+license: perl
+resources:
+  license: http://dev.perl.org/licenses/
+requires:
+  Class::Field: 0
+  TAP::Harness: 3.12
+  XML::Generator: 0
+build_requires:
+  Test::More: 0
+provides:
+  TAP::Formatter::JUnit:
+    file: lib/TAP/Formatter/JUnit.pm
+    version: 0.01
+  TAP::Formatter::JUnit::Session:
+    file: lib/TAP/Formatter/JUnit/Session.pm
+generated_by: Module::Build version 0.280801
+meta-spec:
+  url: http://module-build.sourceforge.net/META-spec-v1.2.html
+  version: 1.2
