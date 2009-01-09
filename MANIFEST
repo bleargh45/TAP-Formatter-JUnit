@@ -10,6 +10,7 @@ lib/TAP/Formatter/JUnit/Session.pm
 t/formatter.t
 t/pod.t
 t/pod-coverage.t
+t/bin/my-prove
 t/tap2junit.t
 t/data/tap/bailout
 t/data/tap/descriptive
