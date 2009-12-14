@@ -87,7 +87,7 @@ sub close_test {
     #                 may not have a plan issued, but should still be considered
     #                 a single error condition)
     my $testsrun = $parser->tests_run() || 0;
-    my $time     = $self->formatter->{timer} ? $self->_time_taken() : undef;
+    my $time     = $self->formatter->timer ? $self->_time_taken() : undef;
     my $failures = $parser->failed();
 
     my $noplan   = $parser->plan() ? 0 : 1;
@@ -119,7 +119,7 @@ sub close_test {
 sub dump_junit_xml {
     my ($self, $testsuite) = @_;
     if (my $spool_dir = $ENV{PERL_TEST_HARNESS_DUMP_TAP}) {
-        my $spool = File::Spec->catfile($spool_dir, $self->{name} . '.junit.xml');
+        my $spool = File::Spec->catfile($spool_dir, $self->name() . '.junit.xml');
 
         # clone the testsuite; XML::Generator only lets us auto-vivify the
         # CDATA sections *ONCE*.
