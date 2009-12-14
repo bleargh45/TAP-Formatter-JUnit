@@ -1,6 +1,6 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
-0.02
+0.02    Fri Jan  9 23:35 PST 2009
     - POD updates
     - minor cleanup to the test names output in JUnit
     - attempt to fix failing CPAN Tester reports, where an older version of
