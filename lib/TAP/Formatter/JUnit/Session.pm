@@ -179,6 +179,17 @@ sub _time_taken {
 }
 
 ###############################################################################
+# Calculate the time taken since the last test was seen in the TAP output.
+sub _time_since_last_test {
+    my $self = shift;
+    my $t_st = $self->{_junit_t_last_test} || $self->parser->start_time();
+    my $t_en = $self->get_time();
+    my $diff = $t_en - $t_st;
+    $self->{_junit_t_last_test} = $t_en;
+    return $diff;
+}
+
+###############################################################################
 # Flushes the queue of test results, item by item.
 sub _flush_queue {
     my $self = shift;
@@ -203,6 +214,7 @@ sub _flush_item {
     if ($result->is_test) {
         my %attrs = (
             'name' => _get_testcase_name($result),
+            ($self->formatter->timer ? ('time'=>$self->_time_since_last_test) : ()),
             );
 
         # slurp in all the content up to the next test

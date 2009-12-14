@@ -12,6 +12,7 @@ t/pod.t
 t/pod-coverage.t
 t/bin/my-prove
 t/tap2junit.t
+t/timer.t
 t/data/tap/bailout
 t/data/tap/descriptive
 t/data/tap/descriptive_trailing
