@@ -50,6 +50,7 @@ sub xml {
         $self->{xml} = XML::Generator->new(
             ':pretty',
             ':std',
+            'escape'   => 'always,high-bit,even-entities',
             'encoding' => 'UTF-8',
         );
     }
