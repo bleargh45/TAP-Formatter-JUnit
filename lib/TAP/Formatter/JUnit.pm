@@ -166,6 +166,8 @@ C<Test::Harness>; they became the basis for the unit tests here.
 Other thanks go out to those that have provided feedback, comments, or patches:
 
   Mark Aufflick
+  Joe McMahon
+  Michael Nachbaur
 
 =head1 COPYRIGHT
 
