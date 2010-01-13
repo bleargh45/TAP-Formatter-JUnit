@@ -36,5 +36,5 @@ tap2junit_name: {
 
 sub _tap2junit {
     my @args = @_;
-    system(qq{ $^X -Ilib bin/tap2junit @args 2>/dev/null });
+    system(qq{ $^X -Iblib/lib blib/script/tap2junit @args 2>/dev/null });
 }

@@ -15,7 +15,7 @@ tap2junit_filter: {
 
     my ($chld_in, $chld_out);
     my $pid = open2($chld_out, $chld_in,
-        qq($^X -Ilib bin/tap2junit --name data_tap_simple -)
+        qq($^X -Iblib/lib blib/script/tap2junit --name data_tap_simple -)
     );
     ok $pid, 'tap2junit started';
 

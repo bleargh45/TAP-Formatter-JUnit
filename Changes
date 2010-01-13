@@ -12,6 +12,8 @@ Revision history for Perl extension TAP::Formatter::JUnit.
       to Joe McMahon for the original patch on which this is based
     - switch unit tests to use Test::Output for capturing output, instead of
       trying to run "prove" directly
+    - update unit tests to run against "blib/lib" and "blib/script" instead
+      of just "lib" and "bin"
 
 0.03    Sun Dec 13 22:36 PST 2009
     - add timer output for each test case (not just for the suite as a whole);
