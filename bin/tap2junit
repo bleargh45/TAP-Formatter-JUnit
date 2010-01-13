@@ -13,11 +13,13 @@ use File::Slurp qw(slurp);
 ###############################################################################
 # Read in our command line options.
 my ($help, $man);
+my $name;
 my $verbose;
 my $suffix = '.xml';
 GetOptions(
     'suffix=s'  => \$suffix,
     'verbose'   => \$verbose,
+    'name|junit_name=s' => \$name,
     'help|?'    => \$help,
     'man'       => \$man,
 ) || pod2usage(1);
@@ -42,6 +44,9 @@ foreach my $file (@tap_files) {
     my $fout = IO::File->new( $junit_file, '>' )
             || die "can't open '$junit_file' for writing; $!";
 
+    # Name the test; if one wasn't provided, name it after the file itself.
+    $name ||= $file;
+
     # Convert the TAP to JUnit
     eval {
         # Create the TAP formatter, aggregator, and parser that we're going to
@@ -53,7 +58,7 @@ foreach my $file (@tap_files) {
         # Parse all of the TAP in this file.
         $aggregator->start();
 
-        my $session = $formatter->open_test($file, $parser);
+        my $session = $formatter->open_test($name, $parser);
         while (my $result = $parser->next()) {
             $session->result($result);
         }
@@ -92,6 +97,7 @@ tap2junit - Converts TAP output to JUnit
   Options:
     --suffix <suffix>   Suffix for JUnit output files (default ".xml")
     --verbose           Display verbose status during conversion
+    --name <name>       Provide explicit name for the JUnit test
     --help/-?           Display brief help message
     --man               Display full documentation
 
@@ -121,6 +127,15 @@ Defaults to F<.xml>
 
 Display verbose status information during the conversion (telling you which TAP
 file its working on).
+
+=item B<--name E<lt>nameE<gt>>
+
+Specifies an explicit name for the JUnit test.  If no name is provided, a
+default name will be constructed based on the full path of the TAP file being
+processed.
+
+This option has also been aliased as C<--junit_name> to provide compatibility
+with a patch from Joe McMahon.
 
 =item B<--help/-?>
 
