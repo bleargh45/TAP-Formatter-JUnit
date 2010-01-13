@@ -4,8 +4,9 @@ use strict;
 use warnings;
 use Test::More;
 use Test::Differences;
+use Test::Output qw(stdout_from);
 use File::Slurp qw(slurp);
-use App::Prove 3.12;
+use TAP::Harness;
 
 ###############################################################################
 # Figure out how many tests we have to run.
@@ -21,7 +22,16 @@ plan tests => scalar(@tests);
 foreach my $test (@tests) {
     (my $junit = $test) =~ s{/tests/}{/tests/junit/};
 
-    my $received = `$^X t/bin/my-prove --formatter TAP::Formatter::JUnit --merge $test`;
+    my $received = stdout_from( sub {
+        eval {
+            my $harness = TAP::Harness->new( {
+                merge           => 1,
+                formatter_class => 'TAP::Formatter::JUnit',
+            } );
+            $harness->runtests($test);
+        };
+    } );
+
     my $expected = slurp($junit);
 
     eq_or_diff $received, $expected, $test;
