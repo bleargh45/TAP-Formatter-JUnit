@@ -17,11 +17,11 @@ my $name;
 my $verbose;
 my $suffix = '.xml';
 GetOptions(
-    'suffix=s'  => \$suffix,
-    'verbose'   => \$verbose,
+    'suffix=s'          => \$suffix,
+    'verbose'           => \$verbose,
     'name|junit_name=s' => \$name,
-    'help|?'    => \$help,
-    'man'       => \$man,
+    'help|?'            => \$help,
+    'man'               => \$man,
 ) || pod2usage(1);
 pod2usage(1) if ($help);
 pod2usage( -exitstatus=>0, -verbose=>2 ) if ($man);
