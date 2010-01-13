@@ -1,6 +1,6 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
-0.04
+0.04    Wed Jan 13 15:51 PST 2010
     - extra escaping/cleanup of characters before inserting them into the XML
       stream, to keep JUnit parsers like Hudson's from choking.  Thanks go out
       to Joe McMahon and Michael Nachbaur for prodding to get this fixed and
