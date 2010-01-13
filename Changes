@@ -8,6 +8,8 @@ Revision history for Perl extension TAP::Formatter::JUnit.
     - new "--name" option for tap2junit, allowing for tests to be explicitly
       named.  Aliased to "--junit_name" to provide compatibility with patch
       from Joe McMahon.
+    - tap2junit can now filter stdin/stdout; use "-" as the filename.  Thanks
+      to Joe McMahon for the original patch on which this is based
 
 0.03    Sun Dec 13 22:36 PST 2009
     - add timer output for each test case (not just for the suite as a whole);

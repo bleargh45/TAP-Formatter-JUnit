@@ -37,12 +37,21 @@ foreach my $file (@tap_files) {
     verbose( "converting TAP to JUnit: $file" );
 
     # Slurp in the TAP.
-    my $tap = slurp($file);
+    my $tap = ($file eq '-')
+        ? do { local $/; <STDIN>; }
+        : slurp($file);
 
     # Open up a FH for where we're going to dump the JUnit
-    my $junit_file = "${file}${suffix}";
-    my $fout = IO::File->new( $junit_file, '>' )
-            || die "can't open '$junit_file' for writing; $!";
+    my $fout;
+    if ($file eq '-') {
+        open $fout, '>&STDOUT'
+            || die "can't dup STDOUT; $!\n";
+    }
+    else {
+        my $junit_file = "${file}${suffix}";
+        $fout = IO::File->new( $junit_file, '>' )
+             || die "can't open '$junit_file' for writing; $!";
+    }
 
     # Name the test; if one wasn't provided, name it after the file itself.
     $name ||= $file;
@@ -108,6 +117,10 @@ C<tap2junit> converts TAP output to JUnit.
 Give it a list of files containing TAP results and it will create a series of
 F<????.junit.xml> output files containing the JUnit representations of that TAP
 contained in the files.
+
+If you specify F<-> as the filename, C<tap2junit> will read from STDIN and write
+to STDOUT.  You may also want to use the C<--name> option to name the test
+explicitly (as the default name of "-" isn't going to make much sense).
 
 =head1 OPTIONS
 
