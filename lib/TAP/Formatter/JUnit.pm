@@ -47,7 +47,11 @@ sub summary {
 sub xml {
     my $self = shift;
     unless ($self->{xml}) {
-        $self->{xml} = XML::Generator->new(':pretty', ':std', 'encoding'=>'UTF-8');
+        $self->{xml} = XML::Generator->new(
+            ':pretty',
+            ':std',
+            'encoding' => 'UTF-8',
+        );
     }
     return $self->{xml};
 }
@@ -59,7 +63,12 @@ sub xml {
 sub xml_unescape {
     my $self = shift;
     unless ($self->{xml_unescape}) {
-        $self->{xml_unescape} = XML::Generator->new(':pretty', ':std', 'escape'=>'unescaped', 'encoding'=>'UTF-8');
+        $self->{xml_unescape} = XML::Generator->new(
+            ':pretty',
+            ':std',
+            'escape'   => 'unescaped',
+            'encoding' => 'UTF-8'
+        );
     }
     return $self->{xml_unescape};
 }
