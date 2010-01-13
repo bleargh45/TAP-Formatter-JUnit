@@ -14,6 +14,7 @@ t/bin/my-prove
 t/tap2junit.t
 t/timer.t
 t/data/tap/bailout
+t/data/tap/bad_chars
 t/data/tap/descriptive
 t/data/tap/descriptive_trailing
 t/data/tap/die
@@ -35,6 +36,7 @@ t/data/tap/todo_inline
 t/data/tap/todo_misparse
 t/data/tap/too_many
 t/data/tap/junit/bailout
+t/data/tap/junit/bad_chars
 t/data/tap/junit/descriptive
 t/data/tap/junit/descriptive_trailing
 t/data/tap/junit/die
@@ -56,6 +58,7 @@ t/data/tap/junit/todo_inline
 t/data/tap/junit/todo_misparse
 t/data/tap/junit/too_many
 t/data/tests/bailout
+t/data/tests/bad_chars
 t/data/tests/descriptive
 t/data/tests/descriptive_trailing
 t/data/tests/die
@@ -77,6 +80,8 @@ t/data/tests/todo_inline
 t/data/tests/todo_misparse
 t/data/tests/too_many
 t/data/tests/junit/bailout
+t/data/tests/junit/bad_chars
+t/data/tests/junit/bad_chars
 t/data/tests/junit/descriptive
 t/data/tests/junit/descriptive_trailing
 t/data/tests/junit/die

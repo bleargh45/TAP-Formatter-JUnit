@@ -1,5 +1,11 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
+0.04
+    - extra escaping/cleanup of characters before inserting them into the XML
+      stream, to keep JUnit parsers like Hudson's from choking.  Thanks go out
+      to Joe McMahon and Michael Nachbaur for prodding to get this fixed and
+      for patches.
+
 0.03    Sun Dec 13 22:36 PST 2009
     - add timer output for each test case (not just for the suite as a whole);
       Hudson needs this in order to show timing output for test runs.  Thanks

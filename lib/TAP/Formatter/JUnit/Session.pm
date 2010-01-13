@@ -301,16 +301,27 @@ sub _clean_to_java_class_name {
 sub _clean_test_description {
     my $test = shift;
     my $desc = $test->description();
-    $desc =~ s/\000//g;     # NULLs aren't valid in test description
-    return $desc;
+    return _squeaky_clean($desc);
 }
 
 ###############################################################################
-# Creates a CDATA block for the given data.
+# Creates a CDATA block for the given data (which is made squeaky clean first,
+# so that JUnit parsers like Hudson's don't choke).
 sub _cdata {
     my ($self, $data) = @_;
-    $data =~ s/\000//g;     # NULLs aren't valid in a CDATA section
+    $data = _squeaky_clean($data);
     return $self->xml->xmlcdata($data);
+}
+
+###############################################################################
+# Clean a string to the point that JUnit can't possibly have a problem with it.
+sub _squeaky_clean {
+    my $string = shift;
+    # control characters (except CR and LF)
+    $string =~ s/([\x00-\x09\x0b\x0c\x0e-\x1f])/"^".chr(ord($1)+64)/ge;
+    # high-byte characters
+    $string =~ s/([\x7f-\xff])/'[\\x'.sprintf('%02x',ord($1)).']'/ge;
+    return $string;
 }
 
 1;
