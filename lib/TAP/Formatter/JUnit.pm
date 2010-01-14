@@ -24,6 +24,7 @@ sub open_test {
         name        => $test,
         formatter   => $self,
         parser      => $parser,
+        passing_todo_ok => $ENV{ALLOW_PASSING_TODOS} ? 1 : 0,
     } );
     return $session;
 }
@@ -121,6 +122,11 @@ IMHO that's ok as you've now got the data in two parsable formats).
 
 Timing information is included in the JUnit XML, I<if> you specified C<--timer>
 when you ran F<prove>.
+
+In standard use, "passing TODOs" are treated as failure conditions (and are
+reported as such in the generated JUnit).  If you wish to treat these as a
+"pass" and not a "fail" condition, setting C<ALLOW_PASSING_TODOS> in your
+environment will turn these into pass conditions.
 
 The JUnit output generated is partial to being grokked by Hudson
 (L<http://hudson.dev.java.net/>).  That's the build tool I'm using at the

@@ -11,6 +11,22 @@ use IO::File;
 field 'testcases'   => [];
 field 'system_out'  => '';
 field 'system_err'  => '';
+field 'passing_todo_ok' => 0;
+
+###############################################################################
+# Subroutine:   _initialize($arg_for)
+###############################################################################
+# Custom initializer, so we can accept a new "passing_todo_ok" argument at
+# instantiation time.
+sub _initialize {
+    my ($self, $arg_for) = @_;
+    $arg_for ||= {};
+
+    my $passing_todo_ok = delete $arg_for->{passing_todo_ok};
+    $self->passing_todo_ok($passing_todo_ok);
+
+    return $self->SUPER::_initialize($arg_for);
+}
 
 ###############################################################################
 # Subroutine:   result($result)
@@ -94,7 +110,8 @@ sub close_test {
     my $planned  = $parser->tests_planned() || 0;
     my $bad_exit = $parser->exit() ? 1 : 0;
 
-    my $errors   = $parser->todo_passed();
+    my $errors   = 0;
+    $errors += $parser->todo_passed() unless $self->passing_todo_ok();
     $errors += abs($testsrun - $planned) if ($planned);
     $errors += ($noplan || $bad_exit);
 
@@ -226,7 +243,7 @@ sub _flush_item {
 
         # check for bogosity
         my $bogosity;
-        if ($result->todo_passed()) {
+        if ($result->todo_passed() && !$self->passing_todo_ok()) {
             $bogosity = {
                 level   => 'error',
                 type    => 'TodoTestSucceeded',
@@ -338,6 +355,11 @@ C<TAP::Harness>.
 =head1 METHODS
 
 =over
+
+=item B<_initialize($arg_for)>
+
+Over-ridden private initializer, so we can accept a new "passing_todo_ok"
+argument at instantiation time.
 
 =item B<result($result)>
 
