@@ -1,6 +1,6 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
-0.06
+0.06    Wed Jan 13 21:24 PST 2010
     - Fix bug in tap2junit which would cause multiple TAP streams to have the
       *same* name in their output JUnit XML.  Introduced in 0.04.
 
