@@ -4,9 +4,9 @@ use strict;
 use warnings;
 use Test::More;
 use Test::Differences;
-use Test::Output qw(stdout_from);
 use File::Slurp qw(slurp);
 use TAP::Harness;
+use IO::Scalar;
 
 ###############################################################################
 # Figure out how many tests we have to run.
@@ -22,15 +22,16 @@ plan tests => scalar(@tests);
 foreach my $test (@tests) {
     (my $junit = $test) =~ s{/tests/}{/tests/junit/};
 
-    my $received = stdout_from( sub {
-        eval {
-            my $harness = TAP::Harness->new( {
-                merge           => 1,
-                formatter_class => 'TAP::Formatter::JUnit',
-            } );
-            $harness->runtests($test);
-        };
-    } );
+    my $received = '';
+    my $fh       = IO::Scalar->new(\$received);
+    eval {
+        my $harness = TAP::Harness->new( {
+            stdout          => $fh,
+            merge           => 1,
+            formatter_class => 'TAP::Formatter::JUnit',
+        } );
+        $harness->runtests($test);
+    };
 
     my $expected = slurp($junit);
 

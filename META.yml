@@ -16,7 +16,6 @@ build_requires:
   IO::Scalar: 0
   Test::Differences: 0
   Test::More: 0
-  Test::Output: 0.12
 provides:
   TAP::Formatter::JUnit:
     file: lib/TAP/Formatter/JUnit.pm
