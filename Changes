@@ -1,5 +1,9 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
+0.06
+    - Fix bug in tap2junit which would cause multiple TAP streams to have the
+      *same* name in their output JUnit XML.  Introduced in 0.04.
+
 0.05    Wed Jan 13 16:32 PST 2010
     - Add support for ALLOW_PASSING_TODOS environment variable, which forces
       T:F:JUnit to treat passing TODOs as a "pass" and not a "fail" condition.

@@ -54,7 +54,7 @@ foreach my $file (@tap_files) {
     }
 
     # Name the test; if one wasn't provided, name it after the file itself.
-    $name ||= $file;
+    my $test_name = $name || $file;
 
     # Convert the TAP to JUnit
     eval {
@@ -67,7 +67,7 @@ foreach my $file (@tap_files) {
         # Parse all of the TAP in this file.
         $aggregator->start();
 
-        my $session = $formatter->open_test($name, $parser);
+        my $session = $formatter->open_test($test_name, $parser);
         while (my $result = $parser->next()) {
             $session->result($result);
         }
