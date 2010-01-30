@@ -1,0 +1,24 @@
+#!/usr/bin/perl
+
+BEGIN { sleep 3 };
+
+use strict;
+use warnings;
+use Test::More tests => 3;
+
+# should record "0"; no time between plan and test
+ok 1, 'slept 0 seconds';
+
+# should record "2"; time since last test
+sleep 2;
+ok 1, 'slept 2 seconds';
+
+# should record "5"; time between tests, *regardless* of what diagnostics have
+# been output.
+diag "foo";
+sleep 1;
+diag "bar";
+sleep 1;
+diag "foobar";
+sleep 3;
+ok 1, 'slept 5 seconds';

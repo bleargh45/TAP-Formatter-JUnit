@@ -174,6 +174,7 @@ Other thanks go out to those that have provided feedback, comments, or patches:
   Mark Aufflick
   Joe McMahon
   Michael Nachbaur
+  Marc Abramowitz
 
 =head1 COPYRIGHT
 

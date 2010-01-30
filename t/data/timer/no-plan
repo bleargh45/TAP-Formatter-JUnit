@@ -1,0 +1,12 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Test::More qw(no_plan);
+
+# unpredictable; no plan, so "startup time" counts towards time for this test
+ok 1, 'skip timing';
+
+# should record "2"; time since last test
+sleep 2;
+ok 1, 'slept 2 seconds';

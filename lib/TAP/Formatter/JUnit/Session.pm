@@ -42,9 +42,6 @@ sub result {
     # add the raw output
     $self->{system_out} .= $result->raw() . "\n";
 
-    # skip "plan"; no equivalent in JUnit
-    return if ($result->is_plan);
-
     # when we get the next test process the previous one
     $self->_flush_queue if ($result->is_test && $self->{_junit_queue});
 
@@ -55,6 +52,12 @@ sub result {
              || ($result->raw() =~ /^# Looks like your test died before it could output anything/)
            ) {
         push @{$self->{_junit_queue} ||= []}, $result;
+    }
+
+    # track the last time we saw a test/plan, so we can calculate how long it
+    # takes to run individual tests.
+    if ($result->is_test || $result->is_plan) {
+        $self->{_junit_t_last_test} = $self->get_time();
     }
 }
 
@@ -202,8 +205,9 @@ sub _time_since_last_test {
     my $t_st = $self->{_junit_t_last_test} || $self->parser->start_time();
     my $t_en = $self->get_time();
     my $diff = $t_en - $t_st;
-    $self->{_junit_t_last_test} = $t_en;
-    return $diff;
+    my $ret  = $self->{_junit_t_since_last_test} || 0;
+    $self->{_junit_t_since_last_test} = $diff;
+    return $ret;
 }
 
 ###############################################################################
@@ -282,6 +286,10 @@ sub _flush_item {
     }
     else {
         # some sort of non-test output; ignore for now.
+        #
+        # we do, however, need to track the time since the last test, so that
+        # timings get calculated properly
+        $self->_time_since_last_test();
     }
 }
 
