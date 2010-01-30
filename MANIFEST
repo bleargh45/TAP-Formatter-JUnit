@@ -104,3 +104,5 @@ t/data/tests/junit/todo
 t/data/tests/junit/todo_inline
 t/data/tests/junit/todo_misparse
 t/data/tests/junit/too_many
+t/data/timer/no-plan
+t/data/timer/planned
