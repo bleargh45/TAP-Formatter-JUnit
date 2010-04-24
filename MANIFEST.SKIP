@@ -1,6 +1,5 @@
 Build
 _build/
-\.git/
-\.gitignore
+.git/
 \..*\.swp
 blib/
