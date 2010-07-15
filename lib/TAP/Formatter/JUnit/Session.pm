@@ -77,12 +77,14 @@ sub close_test {
     $self->_flush_queue;
 
     # if the test died unexpectedly, make note of that
+    my $die_msg;
     my $exit = $parser->exit();
     if ($exit) {
         my $sys_err = $self->system_err;
         my $wstat   = $parser->wait();
         my $status  = sprintf( "%d (wstat %d, 0x%x)", $exit, $wstat, $wstat );
-        $sys_err .= "Dubious, test returned $status\n";
+        $die_msg  = "Dubious, test returned $status";
+        $sys_err .= "$die_msg\n";
         $self->system_err($sys_err);
     }
 
