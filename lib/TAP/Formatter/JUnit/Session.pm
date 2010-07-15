@@ -80,7 +80,7 @@ sub close_test {
     my $exit = $parser->exit();
     if ($exit) {
         my $sys_err = $self->system_err;
-        my $wstat   = $self->parser->wait();
+        my $wstat   = $parser->wait();
         my $status  = sprintf( "%d (wstat %d, 0x%x)", $exit, $wstat, $wstat );
         $sys_err .= "Dubious, test returned $status\n";
         $self->system_err($sys_err);
