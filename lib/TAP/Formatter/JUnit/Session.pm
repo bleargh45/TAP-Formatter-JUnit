@@ -115,10 +115,10 @@ sub close_test {
     my $planned  = $parser->tests_planned() || 0;
     my $bad_exit = $parser->exit() ? 1 : 0;
 
-    my $errors   = 0;
-    $errors += $parser->todo_passed() unless $self->passing_todo_ok();
-    $errors += abs($testsrun - $planned) if ($planned);
-    $errors += ($noplan || $bad_exit);
+    my $num_errors = 0;
+    $num_errors += $parser->todo_passed() unless $self->passing_todo_ok();
+    $num_errors += abs($testsrun - $planned) if ($planned);
+    $num_errors += ($noplan || $bad_exit);
 
     my @tests = @{$self->testcases()};
     my %attrs = (
@@ -126,7 +126,7 @@ sub close_test {
         'tests'     => $testsrun,
         (defined $time ? ('time'=>$time) : ()),
         'failures'  => $failures,
-        'errors'    => $errors,
+        'errors'    => $num_errors,
     );
     my $testsuite = $xml->testsuite(\%attrs, @tests, $sys_out, $sys_err);
     $self->formatter->add_testsuite($testsuite);
