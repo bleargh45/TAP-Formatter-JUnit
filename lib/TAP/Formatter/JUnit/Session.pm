@@ -113,12 +113,20 @@ sub close_test {
 
     my $noplan   = $parser->plan() ? 0 : 1;
     my $planned  = $parser->tests_planned() || 0;
-    my $bad_exit = $parser->exit() ? 1 : 0;
 
     my $num_errors = 0;
     $num_errors += $parser->todo_passed() unless $self->passing_todo_ok();
     $num_errors += abs($testsrun - $planned) if ($planned);
-    $num_errors += ($noplan || $bad_exit);
+
+    my $suite_err;
+    if ($die_msg) {
+        $suite_err = $xml->error( { message => $die_msg } );
+        $num_errors ++;
+    }
+    elsif ($noplan) {
+        $suite_err = $xml->error( { message => 'No plan in TAP output' } );
+        $num_errors ++;
+    }
 
     my @tests = @{$self->testcases()};
     my %attrs = (
@@ -128,7 +136,7 @@ sub close_test {
         'failures'  => $failures,
         'errors'    => $num_errors,
     );
-    my $testsuite = $xml->testsuite(\%attrs, @tests, $sys_out, $sys_err);
+    my $testsuite = $xml->testsuite(\%attrs, @tests, $sys_out, $sys_err, $suite_err);
     $self->formatter->add_testsuite($testsuite);
     $self->dump_junit_xml($testsuite);
 }
