@@ -12,5 +12,6 @@ ok 2
 ok 3
 ]]></system-out>
     <system-err></system-err>
+    <error message="Looks like you planned 4 tests but ran 3." />
   </testsuite>
 </testsuites>

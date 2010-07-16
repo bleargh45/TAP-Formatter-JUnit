@@ -28,5 +28,6 @@ ok 6
 ok 7
 ]]></system-out>
     <system-err></system-err>
+    <error message="Looks like you planned 3 tests but ran 7." />
   </testsuite>
 </testsuites>
