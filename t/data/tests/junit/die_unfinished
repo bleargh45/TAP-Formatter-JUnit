@@ -13,5 +13,6 @@ ok 3
 ]]></system-out>
     <system-err><![CDATA[Dubious, test returned 1 (wstat 256, 0x100)
 ]]></system-err>
+    <error message="Dubious, test returned 1 (wstat 256, 0x100)" />
   </testsuite>
 </testsuites>

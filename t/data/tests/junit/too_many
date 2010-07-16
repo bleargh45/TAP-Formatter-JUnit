@@ -29,5 +29,6 @@ ok 7
 ]]></system-out>
     <system-err><![CDATA[Dubious, test returned 4 (wstat 1024, 0x400)
 ]]></system-err>
+    <error message="Dubious, test returned 4 (wstat 1024, 0x400)" />
   </testsuite>
 </testsuites>
