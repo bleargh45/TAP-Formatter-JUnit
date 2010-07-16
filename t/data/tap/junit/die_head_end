@@ -13,5 +13,6 @@ ok 3
 ok 4
 ]]></system-out>
     <system-err></system-err>
+    <error message="No plan in TAP output" />
   </testsuite>
 </testsuites>
