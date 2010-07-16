@@ -176,6 +176,7 @@ Other thanks go out to those that have provided feedback, comments, or patches:
   Michael Nachbaur
   Marc Abramowitz
   Colin Robertson
+  Phillip Kimmey
 
 =head1 COPYRIGHT
 

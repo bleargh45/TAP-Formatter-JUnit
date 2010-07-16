@@ -127,6 +127,9 @@ sub close_test {
         $suite_err = $xml->error( { message => 'No plan in TAP output' } );
         $num_errors ++;
     }
+    elsif ($planned && ($testsrun != $planned)) {
+        $suite_err = $xml->error( { message => "Looks like you planned $planned tests but ran $testsrun." } );
+    }
 
     my @tests = @{$self->testcases()};
     my %attrs = (
