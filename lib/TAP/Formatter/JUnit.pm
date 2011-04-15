@@ -15,6 +15,10 @@ has 'testsuites' => (
     is      => 'rw',
     isa     => 'ArrayRef',
     default => sub { [] },
+    traits  => [qw( Array )],
+    handles => {
+        add_testsuite => 'push',
+    },
 );
 
 ###############################################################################
@@ -79,16 +83,6 @@ sub xml_unescape {
         );
     }
     return $self->{xml_unescape};
-}
-
-###############################################################################
-# Subroutine:   add_testsuite($suite)
-###############################################################################
-# Adds the given XML test '$suite' to the list of test suites that we've
-# executed and need to summarize.
-sub add_testsuite {
-    my ($self, $suite) = @_;
-    push @{$self->testsuites}, $suite;
 }
 
 1;

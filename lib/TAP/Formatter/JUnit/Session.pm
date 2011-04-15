@@ -14,6 +14,10 @@ has 'testcases' => (
     is      => 'rw',
     isa     => 'ArrayRef',
     default => sub { [] },
+    traits  => [qw( Array )],
+    handles => {
+        add_testcase => 'push',
+    },
 );
 
 has 'system_out' => (
@@ -191,15 +195,6 @@ sub dump_junit_xml {
         $fout->print($junit);
         $fout->close();
     }
-}
-
-###############################################################################
-# Subroutine:   add_testcase($case)
-###############################################################################
-# Adds an XML test '$case' to the list of testcases we've run in this session.
-sub add_testcase {
-    my ($self, $case) = @_;
-    push @{$self->{testcases}}, $case;
 }
 
 ###############################################################################
