@@ -1,6 +1,8 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
 0.09    ???
+    - Switch from Class::Field to Moose.  Thanks to Dave Lambley for the poke,
+      and the patience.
 
 0.08    Thu Jul 15 23:44 PDT 2010
     - RT#58838, "Error reporting on die or missing plan".  Thanks to Colin

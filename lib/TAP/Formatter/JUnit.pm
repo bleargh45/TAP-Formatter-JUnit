@@ -1,15 +1,21 @@
 package TAP::Formatter::JUnit;
 
-use strict;
-use warnings;
+use Moose;
+use MooseX::NonMoose;
+extends qw(
+    TAP::Formatter::Console
+);
+
 use XML::Generator;
 use TAP::Formatter::JUnit::Session;
-use base qw(TAP::Formatter::Console);
-use Class::Field qw(field);
 
 our $VERSION = '0.09';
 
-field 'testsuites'  => [];
+has 'testsuites' => (
+    is      => 'rw',
+    isa     => 'ArrayRef',
+    default => sub { [] },
+);
 
 ###############################################################################
 # Subroutine:   open_test($test, $parser)
@@ -177,6 +183,7 @@ Other thanks go out to those that have provided feedback, comments, or patches:
   Marc Abramowitz
   Colin Robertson
   Phillip Kimmey
+  Dave Lambley
 
 =head1 COPYRIGHT
 

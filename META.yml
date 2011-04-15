@@ -21,8 +21,9 @@ provides:
   TAP::Formatter::JUnit::Session:
     file: lib/TAP/Formatter/JUnit/Session.pm
 requires:
-  Class::Field: 0
   File::Slurp: 0
+  Moose: 0
+  MooseX::NonMoose: 0
   TAP::Harness: 3.12
   XML::Generator: 0
 resources:

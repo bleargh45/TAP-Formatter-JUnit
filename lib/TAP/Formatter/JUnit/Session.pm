@@ -1,17 +1,38 @@
 package TAP::Formatter::JUnit::Session;
 
-use strict;
-use warnings;
-use base qw(TAP::Formatter::Console::Session);
-use Class::Field qw(field);
+use Moose;
+use MooseX::NonMoose;
+extends qw(
+    TAP::Formatter::Console::Session
+);
+
 use Storable qw(dclone);
 use File::Path qw(mkpath);
 use IO::File;
 
-field 'testcases'   => [];
-field 'system_out'  => '';
-field 'system_err'  => '';
-field 'passing_todo_ok' => 0;
+has 'testcases' => (
+    is      => 'rw',
+    isa     => 'ArrayRef',
+    default => sub { [] },
+);
+
+has 'system_out' => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => '',
+);
+
+has 'system_err' => (
+    is      => 'rw',
+    isa     => 'Str',
+    default => '',
+);
+
+has 'passing_todo_ok' => (
+    is      => 'rw',
+    isa     => 'Bool',
+    default => 0,
+);
 
 ###############################################################################
 # Subroutine:   _initialize($arg_for)

@@ -9,7 +9,8 @@ Module::Build->new(
     'requires'          => {
         'XML::Generator'    => 0,
         'TAP::Harness'      => 3.12,
-        'Class::Field'      => 0,
+        'Moose'             => 0,
+        'MooseX::NonMoose'  => 0,
         'File::Slurp'       => 0,
         },
     'build_requires'    => {
