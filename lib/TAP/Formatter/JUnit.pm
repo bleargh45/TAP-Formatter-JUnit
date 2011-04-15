@@ -31,9 +31,9 @@ has 'testsuites' => (
 sub open_test {
     my ($self, $test, $parser) = @_;
     my $session = TAP::Formatter::JUnit::Session->new( {
-        name        => $test,
-        formatter   => $self,
-        parser      => $parser,
+        name            => $test,
+        formatter       => $self,
+        parser          => $parser,
         passing_todo_ok => $ENV{ALLOW_PASSING_TODOS} ? 1 : 0,
     } );
     return $session;
