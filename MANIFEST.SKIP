@@ -3,3 +3,4 @@ _build/
 .git/
 \..*\.swp
 blib/
+^MYMETA.yml$
