@@ -17,7 +17,7 @@ name: TAP-Formatter-JUnit
 provides:
   TAP::Formatter::JUnit:
     file: lib/TAP/Formatter/JUnit.pm
-    version: 0.08
+    version: 0.09
   TAP::Formatter::JUnit::Session:
     file: lib/TAP/Formatter/JUnit/Session.pm
 requires:
@@ -27,4 +27,4 @@ requires:
   XML::Generator: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.08
+version: 0.09
