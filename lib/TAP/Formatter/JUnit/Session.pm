@@ -38,6 +38,18 @@ has 'passing_todo_ok' => (
     default => 0,
 );
 
+has '_queue' => (
+    is      => 'rw',
+    isa     => 'ArrayRef',
+    default => sub { [] },
+    traits  => [qw( Array )],
+    handles => {
+        _queue_add    => 'push',
+        _queue_remove => 'shift',
+        _queue_empty  => 'is_empty',
+    },
+);
+
 ###############################################################################
 # Subroutine:   _initialize($arg_for)
 ###############################################################################
@@ -68,7 +80,7 @@ sub result {
     $self->{system_out} .= $result->raw() . "\n";
 
     # when we get the next test process the previous one
-    $self->_flush_queue if ($result->is_test && $self->{_junit_queue});
+    $self->_flush_queue if ($result->is_test);
 
     # except for a few things we don't want to process as a "test case", add
     # the test result to the queue.
@@ -76,7 +88,7 @@ sub result {
              || ($result->raw() =~ /^# Looks like you planned \d+ tests? but ran \d+/)
              || ($result->raw() =~ /^# Looks like your test died before it could output anything/)
            ) {
-        push @{$self->{_junit_queue} ||= []}, $result;
+        $self->_queue_add($result);
     }
 
     # track the last time we saw a test/plan, so we can calculate how long it
@@ -243,8 +255,7 @@ sub _time_since_last_test {
 # Flushes the queue of test results, item by item.
 sub _flush_queue {
     my $self = shift;
-    my $queue = $self->{_junit_queue} ||= [];
-    $self->_flush_item while @$queue;
+    $self->_flush_item while @{$self->_queue};
 }
 
 ###############################################################################
@@ -254,10 +265,9 @@ sub _flush_queue {
 # context or errors related to that test.
 sub _flush_item {
     my $self = shift;
-    my $queue = $self->{_junit_queue};
 
     # get the result
-    my $result = shift @$queue;
+    my $result = $self->_queue_remove;
 
     # add result to XML
     my $xml = $self->xml();
@@ -269,8 +279,8 @@ sub _flush_item {
 
         # slurp in all the content up to the next test
         my @content = $result->as_string();
-        while (@{$queue}) {
-            my $followup = shift @{$queue};
+        until ($self->_queue_empty) {
+            my $followup = $self->_queue_remove;
             push @content, $followup->as_string();
         }
 
