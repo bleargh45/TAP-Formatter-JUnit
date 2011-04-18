@@ -284,8 +284,12 @@ sub _flush_item {
     if ($result->is_test) {
         my %attrs = (
             'name' => _get_testcase_name($result),
-            ($self->formatter->timer ? ('time'=>$self->_time_since_last_test) : ()),
-            );
+            (
+                $self->formatter->timer
+                ? ('time' => $self->_time_since_last_test)
+                : ()
+            ),
+        );
 
         # slurp in all the content up to the next test
         my @content = $result->as_string();
