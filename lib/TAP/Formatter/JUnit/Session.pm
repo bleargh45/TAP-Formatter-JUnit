@@ -129,6 +129,21 @@ sub close_test {
     # flush out the queue, in case we've got more test results to add
     $self->_flush_queue;
 
+    # track time for teardown, if needed
+    if ($self->formatter->timer) {
+        my $t_st = $self->_time_of_last_test();
+        my $t_en = $self->get_time;
+        my $teardown_duration = $t_en - $t_st;
+
+        my $attrs = {
+            'name' => _squeaky_clean('(teardown)'),
+            'time' => $teardown_duration,
+        };
+
+        my $testcase = $xml->testcase($attrs);
+        $self->add_testcase($testcase);
+    }
+
     # if the test died unexpectedly, make note of that
     my $die_msg;
     my $exit = $parser->exit();

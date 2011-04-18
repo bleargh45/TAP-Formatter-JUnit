@@ -1,15 +1,16 @@
 #!/usr/bin/perl
 
 BEGIN { sleep 3 };
+END { sleep 2 };
 
 use strict;
 use warnings;
 use Test::More tests => 3;
 
-# show diagnostic output for init/teardown times.
 # show output for init/teardown times.
 END {
     print "init: 3";
+    print "teardown: 2";
 };
 
 # should record "0"; no time between plan and test
