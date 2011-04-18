@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 14;
+use Test::More tests => 17;
 use TAP::Harness;
 use IO::Scalar;
 
@@ -100,8 +100,11 @@ sub verify_timing_correctness {
     my @lines = split /^/, $junit;
     my @tests = grep { /<testcase/ } @lines;
 
+    # Capture init timing from the TAP
+    my ($init_time) = ($junit =~ /init: (\d+)/);
+
     foreach my $test (@tests) {
-        my ($time, $name) = ($test =~ /time="([^"]+)" name="\d+\s+-\s+([^"]+)"/);
+        my ($time, $name) = ($test =~ /time="([^"]+)" name="([^"]+)"/);
         if (!defined $time) {
             ok 0, "... unexpected test line: $test";
             next;
@@ -116,6 +119,9 @@ sub verify_timing_correctness {
         if ($name =~ /slept (\d+) seconds/) {
             my $expected = $1;
             is int($time), int($expected), "... test timing: $name";
+        }
+        elsif ($name =~ /init/) {
+            is int($time), int($init_time), "... timing: $name";
         }
         else {
             ok 0, "... unexpected test name: $name";

@@ -96,7 +96,7 @@ sub result {
     $self->{system_out} .= $result->raw() . "\n";
 
     # when we get the next test process the previous one
-    $self->_flush_queue if ($result->is_test);
+    $self->_flush_queue if ($result->is_test || $result->is_plan);
 
     # except for a few things we don't want to process as a "test case", add
     # the test result to the queue.
@@ -275,6 +275,22 @@ sub _flush_item {
 
     # add result to XML
     my $xml = $self->xml();
+
+    if ($result->is_plan && $self->formatter->timer) {
+        # Initialization timing
+        my $t_st = $self->parser->start_time;
+        my $t_en = $self->get_time;
+        my $init_duration = $t_en - $t_st;
+
+        my $attrs = {
+            'name' => _squeaky_clean('(init)'),
+            'time' => $init_duration,
+        };
+
+        my $testcase = $xml->testcase($attrs);
+        $self->add_testcase($testcase);
+    }
+
     if ($result->is_test) {
         my $test_duration = $self->_duration_of_last_test;
         my %attrs = (
