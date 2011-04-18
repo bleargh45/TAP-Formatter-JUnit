@@ -3,6 +3,10 @@ Revision history for Perl extension TAP::Formatter::JUnit.
 0.09    ???
     - Switch from Class::Field to Moose.  Thanks to Dave Lambley for the poke,
       and the patience.
+    - Track and report timings for "(init)" and "(teardown)" of the test.
+      Without this, Hudson does not properly report on the total time needed
+      for a test suite (it calculates total time by adding up the constituent
+      tests, not by looking at the <testsuite> "time" attribute).
 
 0.08    Thu Jul 15 23:44 PDT 2010
     - RT#58838, "Error reporting on die or missing plan".  Thanks to Colin
