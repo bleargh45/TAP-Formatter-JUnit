@@ -103,6 +103,8 @@ sub verify_timing_correctness {
     # Capture any init/teardown timings from the TAP
     my ($init_time)     = ($junit =~ /init: (\d+)/);
     my ($teardown_time) = ($junit =~ /teardown: (\d+)/);
+    $init_time     ||= 0;
+    $teardown_time ||= 0;
 
     foreach my $test (@tests) {
         my ($time, $name) = ($test =~ /time="([^"]+)" name="([^"]+)"/);
