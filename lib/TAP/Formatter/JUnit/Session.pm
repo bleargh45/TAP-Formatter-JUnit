@@ -60,6 +60,12 @@ sub _build__time_of_last_test {
     return $self->parser->start_time;
 }
 
+has '_duration_of_last_test' => (
+    is      => 'rw',
+    isa     => 'Num',
+    default => 0,
+);
+
 ###############################################################################
 # Subroutine:   _initialize($arg_for)
 ###############################################################################
@@ -250,18 +256,6 @@ sub _total_time_taken {
 }
 
 ###############################################################################
-# Calculate the time taken since the last test was seen in the TAP output.
-sub _time_since_last_test {
-    my $self = shift;
-    my $t_st = $self->_time_of_last_test();
-    my $t_en = $self->get_time();
-    my $diff = $t_en - $t_st;
-    my $ret  = $self->{_junit_t_since_last_test} || 0;
-    $self->{_junit_t_since_last_test} = $diff;
-    return $ret;
-}
-
-###############################################################################
 # Flushes the queue of test results, item by item.
 sub _flush_queue {
     my $self = shift;
@@ -282,14 +276,24 @@ sub _flush_item {
     # add result to XML
     my $xml = $self->xml();
     if ($result->is_test) {
+        my $test_duration = $self->_duration_of_last_test;
         my %attrs = (
             'name' => _get_testcase_name($result),
             (
                 $self->formatter->timer
-                ? ('time' => $self->_time_since_last_test)
-                : ()
+                    ? ('time'=>$self->_duration_of_last_test())
+                    : ()
             ),
         );
+
+        # calculate how long it took for us to get triggered that we'd found
+        # the next test (which is how long _that_ test took)
+        {
+            my $t_st = $self->_time_of_last_test();
+            my $t_en = $self->get_time();
+            my $diff = $t_en - $t_st;
+            $self->_duration_of_last_test($diff);
+        }
 
         # slurp in all the content up to the next test
         my @content = $result->as_string();
