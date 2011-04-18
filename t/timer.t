@@ -119,16 +119,24 @@ sub verify_timing_correctness {
         # close.
         if ($name =~ /slept (\d+) seconds/) {
             my $expected = $1;
-            is int($time), int($expected), "... test timing: $name";
+            rounds_to($time, $expected, "... test timing: $name");
         }
         elsif ($name =~ /init/) {
-            is int($time), int($init_time), "... timing: $name";
+            rounds_to($time, $init_time, "... timing: $name");
         }
         elsif ($name =~ /teardown/) {
-            is int($time), int($teardown_time), "... timing: $name";
+            rounds_to($time, $teardown_time, "... timing: $name");
         }
         else {
             ok 0, "... unexpected test name: $name";
         }
     }
+}
+
+sub rounds_to {
+    my ($got, $expected, $message) = @_;
+    my $r_got      = sprintf('%1.0f', $got);
+    my $r_expected = sprintf('%1.0f', $expected);
+    local $Test::Builder::Level = $Test::Builder::Level + 1;
+    is $r_got, $r_expected, $message;
 }
