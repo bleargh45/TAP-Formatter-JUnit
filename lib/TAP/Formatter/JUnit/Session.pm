@@ -303,28 +303,7 @@ sub _flush_item {
         }
 
         # check for bogosity
-        my $bogosity;
-        if ($result->todo_passed() && !$self->passing_todo_ok()) {
-            $bogosity = {
-                level   => 'error',
-                type    => 'TodoTestSucceeded',
-                message => $result->explanation(),
-            };
-        }
-        elsif ($result->is_unplanned()) {
-            $bogosity = {
-                level   => 'error',
-                type    => 'UnplannedTest',
-                message => $result->as_string(),
-            };
-        }
-        elsif (not $result->is_ok()) {
-            $bogosity = {
-                level   => 'failure',
-                type    => 'TestFailed',
-                message => $result->as_string(),
-            };
-        }
+        my $bogosity = $self->_check_for_test_bogosity($result);
 
         # create a failure/error element if the test was bogus
         my $failure;
@@ -341,6 +320,39 @@ sub _flush_item {
         my $testcase = $xml->testcase(\%attrs, $failure);
         $self->add_testcase($testcase);
     }
+}
+
+###############################################################################
+# Checks for bogosity in the test result.
+sub _check_for_test_bogosity {
+    my $self   = shift;
+    my $result = shift;
+
+    if ($result->todo_passed() && !$self->passing_todo_ok()) {
+        return {
+            level   => 'error',
+            type    => 'TodoTestSucceeded',
+            message => $result->explanation(),
+        };
+    }
+
+    if ($result->is_unplanned()) {
+        return {
+            level   => 'error',
+            type    => 'UnplannedTest',
+            message => $result->as_string(),
+        };
+    }
+
+    if (not $result->is_ok()) {
+        return {
+            level   => 'failure',
+            type    => 'TestFailed',
+            message => $result->as_string(),
+        };
+    }
+
+    return;
 }
 
 ###############################################################################
