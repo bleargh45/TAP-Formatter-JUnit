@@ -333,13 +333,6 @@ sub _flush_item {
         my $testcase = $xml->testcase(\%attrs, $failure);
         $self->add_testcase($testcase);
     }
-    else {
-        # some sort of non-test output; ignore for now.
-        #
-        # we do, however, need to track the time since the last test, so that
-        # timings get calculated properly
-        $self->_time_since_last_test();
-    }
 }
 
 ###############################################################################
