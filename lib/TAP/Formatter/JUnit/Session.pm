@@ -50,6 +50,16 @@ has '_queue' => (
     },
 );
 
+has '_time_of_last_test' => (
+    is         => 'rw',
+    isa        => 'Num',
+    lazy_build => 1,
+);
+sub _build__time_of_last_test {
+    my $self = shift;
+    return $self->parser->start_time;
+}
+
 ###############################################################################
 # Subroutine:   _initialize($arg_for)
 ###############################################################################
@@ -94,7 +104,7 @@ sub result {
     # track the last time we saw a test/plan, so we can calculate how long it
     # takes to run individual tests.
     if ($result->is_test || $result->is_plan) {
-        $self->{_junit_t_last_test} = $self->get_time();
+        $self->_time_of_last_test( $self->get_time );
     }
 }
 
@@ -243,7 +253,7 @@ sub _time_taken {
 # Calculate the time taken since the last test was seen in the TAP output.
 sub _time_since_last_test {
     my $self = shift;
-    my $t_st = $self->{_junit_t_last_test} || $self->parser->start_time();
+    my $t_st = $self->_time_of_last_test();
     my $t_en = $self->get_time();
     my $diff = $t_en - $t_st;
     my $ret  = $self->{_junit_t_since_last_test} || 0;
