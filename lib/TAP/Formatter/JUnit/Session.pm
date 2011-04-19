@@ -179,7 +179,7 @@ sub close_test {
     }
 
     # track time for teardown, if needed
-    if ($self->formatter->timer) {
+    if ($timer_enabled) {
         my $duration = $self->parser->end_time - $queue->[-1]->time;
         my $case     = $xml->testcase( {
             'name' => _squeaky_clean('(teardown)'),
@@ -220,7 +220,7 @@ sub close_test {
     #                 may not have a plan issued, but should still be considered
     #                 a single error condition)
     my $testsrun = $parser->tests_run() || 0;
-    my $time     = $self->formatter->timer ? $self->_total_time_taken() : undef;
+    my $time     = $self->_total_time_taken();
     my $failures = $parser->failed();
 
     my $noplan   = $parser->plan() ? 0 : 1;
@@ -245,11 +245,13 @@ sub close_test {
 
     my @tests = @{$self->testcases()};
     my %attrs = (
-        'name'      => _get_testsuite_name($self),
-        'tests'     => $testsrun,
-        (defined $time ? ('time'=>$time) : ()),
-        'failures'  => $failures,
-        'errors'    => $num_errors,
+        'name'     => _get_testsuite_name($self),
+        'tests'    => $testsrun,
+        'failures' => $failures,
+        'errors'   => $num_errors,
+        (
+            $timer_enabled ? ('time' => $time) : ()
+        ),
     );
     my $testsuite = $xml->testsuite(\%attrs, @tests, $sys_out, $sys_err, $suite_err);
     $self->formatter->add_testsuite($testsuite);
