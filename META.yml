@@ -18,6 +18,8 @@ provides:
   TAP::Formatter::JUnit:
     file: lib/TAP/Formatter/JUnit.pm
     version: 0.09
+  TAP::Formatter::JUnit::Result:
+    file: lib/TAP/Formatter/JUnit/Result.pm
   TAP::Formatter::JUnit::Session:
     file: lib/TAP/Formatter/JUnit/Session.pm
 requires:
