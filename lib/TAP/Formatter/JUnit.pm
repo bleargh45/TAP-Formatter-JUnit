@@ -21,6 +21,20 @@ has 'testsuites' => (
     },
 );
 
+has 'xml' => (
+    is         => 'rw',
+    isa        => 'XML::Generator',
+    lazy_build => 1,
+);
+sub _build_xml {
+    return XML::Generator->new(
+        ':pretty',
+        ':std',
+        'escape'   => 'always,high-bit,even-entities',
+        'encoding' => 'UTF-8',
+    );
+}
+
 ###############################################################################
 # Subroutine:   open_test($test, $parser)
 ###############################################################################
@@ -49,23 +63,6 @@ sub summary {
 
     my @suites = @{$self->testsuites};
     print { $self->stdout } $self->xml->testsuites( @suites );
-}
-
-###############################################################################
-# Subroutine:   xml()
-###############################################################################
-# Returns a new 'XML::Generator', to generate XML output.
-sub xml {
-    my $self = shift;
-    unless ($self->{xml}) {
-        $self->{xml} = XML::Generator->new(
-            ':pretty',
-            ':std',
-            'escape'   => 'always,high-bit,even-entities',
-            'encoding' => 'UTF-8',
-        );
-    }
-    return $self->{xml};
 }
 
 ###############################################################################
@@ -140,6 +137,10 @@ moment and needed to be able to generate JUnit output for.
 
 List-ref of test suites that have been executed.
 
+=item xml
+
+An C<XML::Generator> instance, to be used to generate XML output.
+
 =back
 
 =head1 METHODS
@@ -156,10 +157,6 @@ formatter session.
 =item B<summary($aggregate)>
 
 Prints the summary report (in JUnit) after all tests are run.
-
-=item B<xml()>
-
-Returns a new C<XML::Generator>, to generate XML output.
 
 =item B<xml_unescape()>
 
