@@ -132,6 +132,16 @@ The JUnit output generated is partial to being grokked by Hudson
 (L<http://hudson.dev.java.net/>).  That's the build tool I'm using at the
 moment and needed to be able to generate JUnit output for.
 
+=head1 ATTRIBUTES
+
+=over
+
+=item testsuites
+
+List-ref of test suites that have been executed.
+
+=back
+
 =head1 METHODS
 
 =over
