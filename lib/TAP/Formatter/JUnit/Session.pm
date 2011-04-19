@@ -159,9 +159,6 @@ sub close_test {
         }
     }
 
-    # collect up all of the captured test output
-    my $captured = join '', map { $_->raw . "\n" } @{$queue};
-
     # track time for teardown, if needed
     if ($timer_enabled) {
         my $duration = $self->parser->end_time - $queue->[-1]->time;
@@ -171,6 +168,9 @@ sub close_test {
         } );
         $self->add_testcase($case);
     }
+
+    # collect up all of the captured test output
+    my $captured = join '', map { $_->raw . "\n" } @{$queue};
 
     # if the test died unexpectedly, make note of that
     my $die_msg;
