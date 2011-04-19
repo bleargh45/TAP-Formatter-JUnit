@@ -5,19 +5,18 @@ use warnings;
 use Test::More tests => 20;
 use TAP::Harness;
 use IO::Scalar;
+use File::Slurp qw(write_file);
 
 ###############################################################################
 # When timer is disabled, we should have *NO* timer info in the JUnit output.
 timer_disabled: {
-    my $results = undef;
-    my $fh      = IO::Scalar->new(\$results);
-    my $harness = TAP::Harness->new( {
-        formatter_class => 'TAP::Formatter::JUnit',
-        timer           => 0,
-        stdout          => $fh,
+    my $test     = qq|
+        use Test::More tests => 1;
+        pass 'no timing in this test';
+    |;
+    my $results = run_test($test, {
+        timer => 0,
     } );
-
-    $harness->runtests('t/data/tests/simple');
     ok $results, 'got JUnit';
     unlike $results, qr/time/ism, '... without any timing information';
 }
@@ -25,15 +24,14 @@ timer_disabled: {
 ###############################################################################
 # When timer is enabled, JUnit output *should* have timer info in it.
 timer_enabled: {
-    my $results = undef;
-    my $fh      = IO::Scalar->new(\$results);
-    my $harness = TAP::Harness->new( {
-        formatter_class => 'TAP::Formatter::JUnit',
-        timer           => 1,
-        stdout          => $fh,
+    my $test     = qq|
+        use Test::More tests => 2;
+        pass 'one';
+        pass 'two';
+    |;
+    my $results = run_test($test, {
+        timer => 1,
     } );
-
-    $harness->runtests('t/data/tests/simple');
     ok $results, 'got JUnit';
     like $results, qr/time/ism, '... with timing information';
 }
@@ -44,33 +42,42 @@ timer_enabled: {
 # Test once with merged output off, then once with it on; want to make sure that
 # merging diagnostic output into the TAP doesn't monkey up the timings.
 correct_timing_test_has_plan: {
-    unmerged: {
-        my $results = undef;
-        my $fh      = IO::Scalar->new(\$results);
-        my $harness = TAP::Harness->new( {
-            formatter_class => 'TAP::Formatter::JUnit',
-            timer           => 1,
-            stdout          => $fh,
-        } );
+    my $test     = qq|
+        use Test::More tests => 3;
+        BEGIN { sleep 3 };
+        END   { sleep 2 };
+        sleep 0;    pass "one";
+        sleep 2;    pass "two";
 
-        $harness->runtests('t/data/timer/planned');
+        sleep 1;    diag "foo";
+        sleep 1;    diag "bar";
+        sleep 3;    diag "foobar";
+        pass "three";
+    |;
+    my $expect = {
+        '(init)'     => 3,
+        '1 - one'    => 0,
+        '2 - two'    => 2,
+        '3 - three'  => 5,
+        '(teardown)' => 2,
+    };
+
+    unmerged: {
+        my $results = run_test($test, {
+            timer => 1,
+            merge => 0,
+        } );
         ok $results, 'got JUnit - timing correctness w/test plan (unmerged)';
-        verify_timing_correctness($results);
+        verify_timings($results, $expect);
     }
 
     merged: {
-        my $results = undef;
-        my $fh      = IO::Scalar->new(\$results);
-        my $harness = TAP::Harness->new( {
-            formatter_class => 'TAP::Formatter::JUnit',
-            timer           => 1,
-            merge           => 1,
-            stdout          => $fh,
+        my $results = run_test($test, {
+            timer => 1,
+            merge => 1,
         } );
-
-        $harness->runtests('t/data/timer/planned');
         ok $results, 'got JUnit - timing correctness w/test plan (merged)';
-        verify_timing_correctness($results);
+        verify_timings($results, $expect);
     }
 }
 
@@ -81,56 +88,73 @@ correct_timing_test_has_plan: {
 # timing, as it'll also involve the startup overhead.  As such, its skipped (by
 # denoting it as "skip" in its test name).
 correct_timing_test_unplanned: {
-    my $results = undef;
-    my $fh      = IO::Scalar->new(\$results);
-    my $harness = TAP::Harness->new( {
-        formatter_class => 'TAP::Formatter::JUnit',
-        timer           => 1,
-        merge           => 1,
-        stdout          => $fh,
-    } );
+    my $test     = qq|
+        use Test::More qw(no_plan);
+        BEGIN { sleep 3 };
+        END   { sleep 2 };
+        sleep 0;    pass "one";
+        sleep 2;    pass "two";
 
-    $harness->runtests('t/data/timer/no-plan');
+        sleep 1;    diag "foo";
+        sleep 1;    diag "bar";
+        sleep 3;    diag "foobar";
+        pass "three";
+    |;
+    my $expect = {
+        '1 - one'    => 3,  # init time is *hidden* in initial test
+        '2 - two'    => 2,
+        '3 - three'  => 5,
+        '(teardown)' => 2,
+    };
+
+    my $results = run_test($test, {
+        timer => 1,
+        merge => 1,
+    } );
     ok $results, 'got JUnit - timing correctness w/o test plan';
-    verify_timing_correctness($results);
+    verify_timings($results, $expect);
 }
 
-sub verify_timing_correctness {
-    my $junit = shift;
+sub run_test {
+    my $code = shift;
+    my $opts = shift;
+    my $file = "test-$$.t";
+
+    my $junit = undef;
+    my $fh    = IO::Scalar->new(\$junit);
+    my $harness = TAP::Harness->new( {
+        formatter_class => 'TAP::Formatter::JUnit',
+        stdout          => $fh,
+        %{$opts},
+    } );
+
+    write_file($file, $code);
+    $harness->runtests($file);
+    unlink $file;
+
+    return $junit;
+}
+
+sub verify_timings {
+    my $junit  = shift;
+    my $expect = shift;
+
     my @lines = split /^/, $junit;
     my @tests = grep { /<testcase/ } @lines;
-
-    # Capture any init/teardown timings from the TAP
-    my ($init_time)     = ($junit =~ /init: (\d+)/);
-    my ($teardown_time) = ($junit =~ /teardown: (\d+)/);
-    $init_time     ||= 0;
-    $teardown_time ||= 0;
 
     foreach my $test (@tests) {
         my ($time, $name) = ($test =~ /time="([^"]+)" name="([^"]+)"/);
         if (!defined $time) {
-            ok 0, "... unexpected test line: $test";
+            fail "... unexpected test line: $test";
             next;
         }
 
-        # there are known times when the test time is unpredictable, but they're
-        # noted as "skip".
-        next if ($name =~ /skip/);
-
-        # see how long test was _supposed_ to have taken, and see if we're
-        # close.
-        if ($name =~ /slept (\d+) seconds/) {
-            my $expected = $1;
-            rounds_to($time, $expected, "... test timing: $name");
-        }
-        elsif ($name =~ /init/) {
-            rounds_to($time, $init_time, "... timing: $name");
-        }
-        elsif ($name =~ /teardown/) {
-            rounds_to($time, $teardown_time, "... timing: $name");
+        if (exists $expect->{$name}) {
+            rounds_to($time, $expect->{$name}, "... test timing: $name");
         }
         else {
-            ok 0, "... unexpected test name: $name";
+            fail "... unexpected test name: $name";
+            diag $test;
         }
     }
 }
