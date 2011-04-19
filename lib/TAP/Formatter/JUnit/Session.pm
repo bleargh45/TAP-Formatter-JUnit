@@ -201,7 +201,7 @@ sub close_test {
     #                 may not have a plan issued, but should still be considered
     #                 a single error condition)
     my $testsrun = $parser->tests_run() || 0;
-    my $time     = $self->_total_time_taken();
+    my $time     = $parser->end_time() - $parser->start_time();
     my $failures = $parser->failed();
 
     my $noplan   = $parser->plan() ? 0 : 1;
@@ -285,16 +285,6 @@ sub xml {
 sub xml_unescape {
     my $self = shift;
     return $self->formatter->xml_unescape();
-}
-
-###############################################################################
-# Calculate the time taken to parse the current test session.
-sub _total_time_taken {
-    my $self = shift;
-    my $t_st = $self->parser->start_time();
-    my $t_en = $self->parser->end_time();
-    my $t_diff = $t_en - $t_st;
-    return $t_diff;
 }
 
 ###############################################################################
