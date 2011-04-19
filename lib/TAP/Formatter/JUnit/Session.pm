@@ -22,12 +22,6 @@ has 'testcases' => (
     },
 );
 
-has 'system_err' => (
-    is      => 'rw',
-    isa     => 'Str',
-    default => '',
-);
-
 has 'passing_todo_ok' => (
     is      => 'rw',
     isa     => 'Bool',
@@ -182,12 +176,9 @@ sub close_test {
     my $die_msg;
     my $exit = $parser->exit();
     if ($exit) {
-        my $sys_err = $self->system_err;
-        my $wstat   = $parser->wait();
-        my $status  = sprintf( "%d (wstat %d, 0x%x)", $exit, $wstat, $wstat );
+        my $wstat = $parser->wait();
+        my $status = sprintf("%d (wstat %d, 0x%x)", $exit, $wstat, $wstat);
         $die_msg  = "Dubious, test returned $status";
-        $sys_err .= "$die_msg\n";
-        $self->system_err($sys_err);
     }
 
     # add system-out/system-err data, as raw CDATA
@@ -195,7 +186,7 @@ sub close_test {
     $sys_out = $xml->$sys_out($captured ? $self->_cdata($captured) : undef);
 
     my $sys_err = 'system-err';
-    $sys_err = $xml->$sys_err($self->system_err() ? $self->_cdata($self->system_err) : undef);
+    $sys_err = $xml->$sys_err($die_msg ? $self->_cdata("$die_msg\n") : undef);
 
     # update the testsuite with aggregate info on this test suite
     #
