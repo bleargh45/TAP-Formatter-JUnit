@@ -43,9 +43,9 @@ timer_enabled: {
 # merging diagnostic output into the TAP doesn't monkey up the timings.
 correct_timing_test_has_plan: {
     my $test     = qq|
-        use Test::More tests => 3;
         BEGIN { sleep 3 };
         END   { sleep 2 };
+        use Test::More tests => 3;
         sleep 0;    pass "one";
         sleep 2;    pass "two";
 
@@ -89,9 +89,9 @@ correct_timing_test_has_plan: {
 # denoting it as "skip" in its test name).
 correct_timing_test_unplanned: {
     my $test     = qq|
-        use Test::More qw(no_plan);
         BEGIN { sleep 3 };
         END   { sleep 2 };
+        use Test::More qw(no_plan);
         sleep 0;    pass "one";
         sleep 2;    pass "two";
 
