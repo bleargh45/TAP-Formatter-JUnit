@@ -16,7 +16,8 @@ has 'testcases' => (
     default => sub { [] },
     traits  => [qw( Array )],
     handles => {
-        add_testcase => 'push',
+        add_testcase  => 'push',
+        num_testcases => 'count',
     },
 );
 
