@@ -22,12 +22,6 @@ has 'testcases' => (
     },
 );
 
-has 'system_out' => (
-    is      => 'rw',
-    isa     => 'Str',
-    default => '',
-);
-
 has 'system_err' => (
     is      => 'rw',
     isa     => 'Str',
@@ -172,11 +166,7 @@ sub close_test {
     }
 
     # collect up all of the captured test output
-    my $captured_stdout = join "\n", map { $_->raw } @{$queue};
-    if ($captured_stdout) {
-        # XXX both the "\n", and the store
-        $self->system_out("$captured_stdout\n");
-    }
+    my $captured = join '', map { $_->raw . "\n" } @{$queue};
 
     # track time for teardown, if needed
     if ($timer_enabled) {
@@ -202,7 +192,7 @@ sub close_test {
 
     # add system-out/system-err data, as raw CDATA
     my $sys_out = 'system-out';
-    $sys_out = $xml->$sys_out($self->system_out() ? $self->_cdata($self->system_out) : undef);
+    $sys_out = $xml->$sys_out($captured ? $self->_cdata($captured) : undef);
 
     my $sys_err = 'system-err';
     $sys_err = $xml->$sys_err($self->system_err() ? $self->_cdata($self->system_err) : undef);
