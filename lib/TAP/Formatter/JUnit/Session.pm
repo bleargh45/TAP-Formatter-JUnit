@@ -9,6 +9,7 @@ extends qw(
 use Storable qw(dclone);
 use File::Path qw(mkpath);
 use IO::File;
+use TAP::Formatter::JUnit::Result;
 
 has 'testcases' => (
     is      => 'rw',
@@ -45,26 +46,8 @@ has '_queue' => (
     default => sub { [] },
     traits  => [qw( Array )],
     handles => {
-        _queue_add    => 'push',
-        _queue_remove => 'shift',
-        _queue_empty  => 'is_empty',
+        _queue_add => 'push',
     },
-);
-
-has '_time_of_last_test' => (
-    is         => 'rw',
-    isa        => 'Num',
-    lazy_build => 1,
-);
-sub _build__time_of_last_test {
-    my $self = shift;
-    return $self->parser->start_time;
-}
-
-has '_duration_of_last_test' => (
-    is      => 'rw',
-    isa     => 'Num',
-    default => 0,
 );
 
 ###############################################################################
@@ -87,17 +70,9 @@ sub _initialize {
 ###############################################################################
 # Called by the harness for each line of TAP it receives.
 #
-# Internally, all of the TAP is added to a queue until we hit the start of the
-# "next" test (at which point we flush the queue.  This allows us to capture any
-# error output or diagnostic info that comes after a test failure.
+# Queues up all of the TAP output for later conversion to JUnit.
 sub result {
     my ($self, $result) = @_;
-
-    # add the raw output
-    $self->{system_out} .= $result->raw() . "\n";
-
-    # when we get the next test process the previous one
-    $self->_flush_queue if ($result->is_test || $result->is_plan);
 
     # except for a few things we don't want to process as a "test case", add
     # the test result to the queue.
@@ -105,13 +80,11 @@ sub result {
              || ($result->raw() =~ /^# Looks like you planned \d+ tests? but ran \d+/)
              || ($result->raw() =~ /^# Looks like your test died before it could output anything/)
            ) {
-        $self->_queue_add($result);
-    }
-
-    # track the last time we saw a test/plan, so we can calculate how long it
-    # takes to run individual tests.
-    if ($result->is_test || $result->is_plan) {
-        $self->_time_of_last_test( $self->get_time );
+        my $wrapped = TAP::Formatter::JUnit::Result->new(
+            'time'   => $self->get_time,
+            'result' => $result,
+        );
+        $self->_queue_add($wrapped);
     }
 }
 
@@ -124,25 +97,95 @@ sub result {
 # (if necessary), and adds the XML for this test suite to our formatter.
 sub close_test {
     my $self   = shift;
-    my $xml    = $self->xml();
-    my $parser = $self->parser();
+    my $xml    = $self->xml;
+    my $parser = $self->parser;
 
-    # flush out the queue, in case we've got more test results to add
-    $self->_flush_queue;
+    # Process the queued up TAP stream
+    my $is_first      = 1;
+    my $t_start       = $self->parser->start_time;
+    my $t_last_test   = $t_start;
+    my $timer_enabled = $self->formatter->timer;
+
+    my $queue = $self->_queue;
+    my $index = 0;
+    while ($index < @{$queue}) {
+        my $result = $queue->[$index++];
+
+        # First line of output generates the "init" timing.
+        if ($is_first) {
+            if ($timer_enabled) {
+                unless ($result->is_test) {
+                    my $duration = $result->time - $t_start;
+                    my $case     = $xml->testcase( {
+                        'name' => _squeaky_clean('(init)'),
+                        'time' => $duration,
+                    } );
+                    $self->add_testcase($case);
+                    $t_last_test = $result->time;
+                }
+            }
+            $is_first = 0;
+        }
+
+        # Test output
+        if ($result->is_test) {
+            # how long did it take for this test?
+            my $duration = $result->time - $t_last_test;
+
+            # slurp in all of the content up until the next test
+            my $content = $result->as_string;
+            while ($index < @{$queue}) {
+                last if ($queue->[$index]->is_test);
+                last if ($queue->[$index]->is_plan);
+
+                my $stuff = $queue->[$index++];
+                $content .= "\n" . $stuff->as_string;
+            }
+
+            # create a failure/error element if the test was bogus
+            my $failure;
+            my $bogosity = $self->_check_for_test_bogosity($result);
+            if ($bogosity) {
+                my $cdata = $self->_cdata($content);
+                my $level = $bogosity->{level};
+                $failure  = $xml->$level( {
+                    type    => $bogosity->{type},
+                    message => $bogosity->{message},
+                }, $cdata );
+            }
+
+            # add this test to the XML stream
+            my $case = $xml->testcase(
+                {
+                    'name' => _get_testcase_name($result),
+                    (
+                        $timer_enabled ? ('time' => $duration) : ()
+                    ),
+                },
+                $failure,
+            );
+            $self->add_testcase($case);
+
+            # update time of last test seen
+            $t_last_test = $result->time;
+        }
+    }
+
+    # collect up all of the captured test output
+    my $captured_stdout = join "\n", map { $_->raw } @{$queue};
+    if ($captured_stdout) {
+        # XXX both the "\n", and the store
+        $self->system_out("$captured_stdout\n");
+    }
 
     # track time for teardown, if needed
     if ($self->formatter->timer) {
-        my $t_st = $self->_time_of_last_test();
-        my $t_en = $self->get_time;
-        my $teardown_duration = $t_en - $t_st;
-
-        my $attrs = {
+        my $duration = $self->parser->end_time - $queue->[-1]->time;
+        my $case     = $xml->testcase( {
             'name' => _squeaky_clean('(teardown)'),
-            'time' => $teardown_duration,
-        };
-
-        my $testcase = $xml->testcase($attrs);
-        $self->add_testcase($testcase);
+            'time' => $duration,
+        } );
+        $self->add_testcase($case);
     }
 
     # if the test died unexpectedly, make note of that
@@ -269,89 +312,6 @@ sub _total_time_taken {
     my $t_en = $self->parser->end_time();
     my $t_diff = $t_en - $t_st;
     return $t_diff;
-}
-
-###############################################################################
-# Flushes the queue of test results, item by item.
-sub _flush_queue {
-    my $self = shift;
-    $self->_flush_item while @{$self->_queue};
-}
-
-###############################################################################
-# Flushes a single test result item.
-#
-# If the item being flushed is a "test", grab everything that comes after it as
-# context or errors related to that test.
-sub _flush_item {
-    my $self = shift;
-
-    # get the result
-    my $result = $self->_queue_remove;
-
-    # add result to XML
-    my $xml = $self->xml();
-
-    if ($result->is_plan && $self->formatter->timer) {
-        # Initialization timing
-        my $t_st = $self->parser->start_time;
-        my $t_en = $self->get_time;
-        my $init_duration = $t_en - $t_st;
-
-        my $attrs = {
-            'name' => _squeaky_clean('(init)'),
-            'time' => $init_duration,
-        };
-
-        my $testcase = $xml->testcase($attrs);
-        $self->add_testcase($testcase);
-    }
-
-    if ($result->is_test) {
-        my $test_duration = $self->_duration_of_last_test;
-        my %attrs = (
-            'name' => _get_testcase_name($result),
-            (
-                $self->formatter->timer
-                    ? ('time'=>$self->_duration_of_last_test())
-                    : ()
-            ),
-        );
-
-        # calculate how long it took for us to get triggered that we'd found
-        # the next test (which is how long _that_ test took)
-        {
-            my $t_st = $self->_time_of_last_test();
-            my $t_en = $self->get_time();
-            my $diff = $t_en - $t_st;
-            $self->_duration_of_last_test($diff);
-        }
-
-        # slurp in all the content up to the next test
-        my @content = $result->as_string();
-        until ($self->_queue_empty) {
-            my $followup = $self->_queue_remove;
-            push @content, $followup->as_string();
-        }
-
-        # check for bogosity
-        my $bogosity = $self->_check_for_test_bogosity($result);
-
-        # create a failure/error element if the test was bogus
-        my $failure;
-        if ($bogosity) {
-            my $cdata = $self->_cdata( join "\n", @content );
-            my $level = $bogosity->{level};
-            $failure  = $xml->$level( {
-                type    => $bogosity->{type},
-                message => $bogosity->{message},
-                }, $cdata );
-        }
-
-        # create the testcase element and add it to the suite.
-        my $testcase = $xml->testcase(\%attrs, $failure);
-        $self->add_testcase($testcase);
-    }
 }
 
 ###############################################################################
