@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 20;
+use Test::More tests => 21;
 use TAP::Harness;
 use IO::Scalar;
 use File::Slurp qw(write_file);
