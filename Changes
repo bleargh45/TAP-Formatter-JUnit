@@ -7,6 +7,8 @@ Revision history for Perl extension TAP::Formatter::JUnit.
       Without this, Hudson does not properly report on the total time needed
       for a test suite (it calculates total time by adding up the constituent
       tests, not by looking at the <testsuite> "time" attribute).
+    - Rewrite internals, switching from a streaming style to an iterative style
+      of processing the TAP.  Same results, but easier to work with.
 
 0.08    Thu Jul 15 23:44 PDT 2010
     - RT#58838, "Error reporting on die or missing plan".  Thanks to Colin
