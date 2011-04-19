@@ -30,3 +30,27 @@ has 'result' => (
 );
 
 1;
+
+=head1 NAME
+
+TAP::Formatter::JUnit::Result - Wrapper for a TAP result
+
+=head1 DESCRIPTION
+
+C<TAP::Formatter::JUnit::Result> is an internal class, used to wrap/augment
+C<TAP::Parser::Result> objects with timing information.
+
+B<NOT recommended for public consumption; internal use only.>
+
+=head1 AUTHOR
+
+Graham TerMarsch <cpan@howlingfrog.com>
+
+=head1 COPYRIGHT
+
+Copyright 2011, Graham TerMarsch.  All Rights Reserved.
+
+This is free software; you can redistribute it and/or modify it under the same
+terms as Perl itself.
+
+=cut
