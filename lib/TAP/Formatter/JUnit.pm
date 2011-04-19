@@ -65,23 +65,6 @@ sub summary {
     print { $self->stdout } $self->xml->testsuites( @suites );
 }
 
-###############################################################################
-# Subroutine:   xml_unescape()
-###############################################################################
-# Returns a new 'XML::Generator', to generate unescaped XML output.
-sub xml_unescape {
-    my $self = shift;
-    unless ($self->{xml_unescape}) {
-        $self->{xml_unescape} = XML::Generator->new(
-            ':pretty',
-            ':std',
-            'escape'   => 'unescaped',
-            'encoding' => 'UTF-8'
-        );
-    }
-    return $self->{xml_unescape};
-}
-
 1;
 
 =head1 NAME
@@ -157,10 +140,6 @@ formatter session.
 =item B<summary($aggregate)>
 
 Prints the summary report (in JUnit) after all tests are run.
-
-=item B<xml_unescape()>
-
-Returns a new C<XML::Generator>, to generate unescaped XML output.
 
 =item B<add_testsuite($suite)>
 

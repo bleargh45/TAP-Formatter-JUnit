@@ -278,16 +278,6 @@ sub xml {
 }
 
 ###############################################################################
-# Subroutine:   xml_unescape()
-###############################################################################
-# Returns a new 'XML::Generator' to generate unescaped XML output.  This is
-# simply a shortcut to '$self->formatter->xml_unescape()'.
-sub xml_unescape {
-    my $self = shift;
-    return $self->formatter->xml_unescape();
-}
-
-###############################################################################
 # Checks for bogosity in the test result.
 sub _check_for_test_bogosity {
     my $self   = shift;
@@ -426,11 +416,6 @@ session.
 
 Returns a new C<XML::Generator> to generate XML output. This is simply a
 shortcut to C<$self-E<gt>formatter-E<gt>xml()>.
-
-=item B<xml_unescape()>
-
-Returns a new C<XML::Generator> to generate unescaped XML output. This is
-simply a shortcut to C<$self-E<gt>formatter-E<gt>xml_unescape()>.
 
 =back
 
