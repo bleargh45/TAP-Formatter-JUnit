@@ -7,8 +7,9 @@ build_requires:
   Test::Differences: 0
   Test::More: 0
 configure_requires:
-  Module::Build: 0.36
-generated_by: 'Module::Build version 0.3603'
+  Module::Build: 0.38
+dynamic_config: 1
+generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.112150'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -20,8 +21,10 @@ provides:
     version: 0.09
   TAP::Formatter::JUnit::Result:
     file: lib/TAP/Formatter/JUnit/Result.pm
+    version: 0
   TAP::Formatter::JUnit::Session:
     file: lib/TAP/Formatter/JUnit/Session.pm
+    version: 0
 requires:
   File::Slurp: 0
   Moose: 0

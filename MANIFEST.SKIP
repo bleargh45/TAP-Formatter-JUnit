@@ -4,3 +4,4 @@ _build/
 \..*\.swp
 blib/
 ^MYMETA.yml$
+^MYMETA.json$

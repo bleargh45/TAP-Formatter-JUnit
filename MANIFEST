@@ -3,6 +3,7 @@ Changes
 MANIFEST
 MANIFEST.SKIP
 META.yml
+META.json
 README
 bin/tap2junit
 lib/TAP/Formatter/JUnit.pm
