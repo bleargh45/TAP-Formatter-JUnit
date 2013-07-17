@@ -85,7 +85,6 @@ t/data/tests/todo_misparse
 t/data/tests/too_many
 t/data/tests/junit/bailout
 t/data/tests/junit/bad_chars
-t/data/tests/junit/bad_chars
 t/data/tests/junit/descriptive
 t/data/tests/junit/descriptive_trailing
 t/data/tests/junit/die
