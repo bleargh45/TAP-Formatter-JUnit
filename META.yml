@@ -7,9 +7,9 @@ build_requires:
   Test::Differences: 0
   Test::More: 0
 configure_requires:
-  Module::Build: 0.38
+  Module::Build: 0.40
 dynamic_config: 1
-generated_by: 'Module::Build version 0.38, CPAN::Meta::Converter version 2.112150'
+generated_by: 'Module::Build version 0.4004, CPAN::Meta::Converter version 2.120921'
 license: perl
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html
@@ -18,7 +18,7 @@ name: TAP-Formatter-JUnit
 provides:
   TAP::Formatter::JUnit:
     file: lib/TAP/Formatter/JUnit.pm
-    version: 0.09
+    version: 0.10
   TAP::Formatter::JUnit::Result:
     file: lib/TAP/Formatter/JUnit/Result.pm
     version: 0
@@ -33,4 +33,4 @@ requires:
   XML::Generator: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.09
+version: 0.10
