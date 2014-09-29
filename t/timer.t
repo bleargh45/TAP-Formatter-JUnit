@@ -143,8 +143,9 @@ sub verify_timings {
     my @tests = grep { /<testcase/ } @lines;
 
     foreach my $test (@tests) {
-        my ($time, $name) = ($test =~ /time="([^"]+)" name="([^"]+)"/);
-        if (!defined $time) {
+        my ($time) = ($test =~ /time="([^"]+)"/);
+        my ($name) = ($test =~ /name="([^"]+)"/);
+        if ((!defined $time) || (!defined $name)) {
             fail "... unexpected test line: $test";
             next;
         }
