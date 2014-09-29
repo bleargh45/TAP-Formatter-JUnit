@@ -4,7 +4,7 @@
       "Graham TerMarsch (cpan@howlingfrog.com)"
    ],
    "dynamic_config" : 1,
-   "generated_by" : "Module::Build version 0.4004, CPAN::Meta::Converter version 2.120921",
+   "generated_by" : "Module::Build version 0.4007, CPAN::Meta::Converter version 2.132140",
    "license" : [
       "perl_5"
    ],
@@ -42,12 +42,10 @@
          "version" : "0.10"
       },
       "TAP::Formatter::JUnit::Result" : {
-         "file" : "lib/TAP/Formatter/JUnit/Result.pm",
-         "version" : 0
+         "file" : "lib/TAP/Formatter/JUnit/Result.pm"
       },
       "TAP::Formatter::JUnit::Session" : {
-         "file" : "lib/TAP/Formatter/JUnit/Session.pm",
-         "version" : 0
+         "file" : "lib/TAP/Formatter/JUnit/Session.pm"
       }
    },
    "release_status" : "stable",
