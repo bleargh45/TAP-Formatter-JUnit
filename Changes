@@ -1,6 +1,6 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
-0.10    ???
+0.10    Mon Sep 29 12:38 PDT 2014
     - Switch from "Test::Differences" to "Test::XML", to eliminate failures due
       to differences in ordering of XML attributes.  Addresses RT#81552
     - Use "File::Spec->null()" to get proper path to NULL.  RT#81200, RT#82227.
