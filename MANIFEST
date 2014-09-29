@@ -105,3 +105,4 @@ t/data/tests/junit/todo_misparse
 t/data/tests/junit/too_many
 xt/pod.t
 xt/pod-coverage.t
+xt/timer.t
