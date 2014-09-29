@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Test::More tests => 2;
 use File::Slurp qw(slurp);
+use File::Spec;
 
 ###############################################################################
 # TEST: Run "tap2junit" and let it name the test in the JUnit automatically.
@@ -36,5 +37,6 @@ tap2junit_name: {
 
 sub _tap2junit {
     my @args = @_;
-    system(qq{ $^X -Iblib/lib blib/script/tap2junit @args 2>/dev/null });
+    my $null = File::Spec->devnull();
+    system(qq{ $^X -Iblib/lib blib/script/tap2junit @args 2>$null });
 }
