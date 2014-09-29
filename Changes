@@ -1,6 +1,8 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
 0.10    ???
+    - Switch from "Test::Differences" to "Test::XML", to eliminate failures due
+      to differences in ordering of XML attributes.  Addresses RT#81552
 
 0.09    Wed Jan 25 15:13 PST 2012
     - Switch from Class::Field to Moose.  Thanks to Dave Lambley for the poke,

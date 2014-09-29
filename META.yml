@@ -4,8 +4,8 @@ author:
   - 'Graham TerMarsch (cpan@howlingfrog.com)'
 build_requires:
   IO::Scalar: 0
-  Test::Differences: 0
   Test::More: 0
+  Test::XML: 0
 configure_requires:
   Module::Build: 0.40
 dynamic_config: 1

@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More tests => 2;
-use Test::Differences;
+use Test::XML;
 use IPC::Open2 qw(open2);
 use File::Slurp qw(slurp);
 
@@ -23,5 +23,5 @@ tap2junit_filter: {
     close $chld_in;
 
     my $received = do { local $/; <$chld_out> };
-    eq_or_diff $received, $xml, 'results generated on STDOUT';
+    is_xml $received, $xml, 'results generated on STDOUT';
 }

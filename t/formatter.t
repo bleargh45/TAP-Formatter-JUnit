@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Test::More;
-use Test::Differences;
+use Test::XML;
 use File::Slurp qw(slurp);
 use TAP::Harness;
 use IO::Scalar;
@@ -35,5 +35,12 @@ foreach my $test (@tests) {
 
     my $expected = slurp($junit);
 
-    eq_or_diff $received, $expected, $test;
+    # Compare results (bearing in mind that some tests produce zero output, and
+    # thus cannot be parsed as XML)
+    if ($received || $expected) {
+        is_xml $received, $expected, $test;
+    }
+    else {
+        is $received, $expected, $test;
+    }
 }

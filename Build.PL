@@ -15,7 +15,7 @@ Module::Build->new(
         },
     'build_requires'    => {
         'Test::More'        => 0,
-        'Test::Differences' => 0,
         'IO::Scalar'        => 0,
+        'Test::XML'         => 0,
         },
     )->create_build_script();

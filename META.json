@@ -17,8 +17,8 @@
       "build" : {
          "requires" : {
             "IO::Scalar" : "0",
-            "Test::Differences" : "0",
-            "Test::More" : "0"
+            "Test::More" : "0",
+            "Test::XML" : "0"
          }
       },
       "configure" : {
