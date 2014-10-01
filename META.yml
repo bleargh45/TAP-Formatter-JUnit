@@ -4,6 +4,7 @@ author:
   - 'Graham TerMarsch (cpan@howlingfrog.com)'
 build_requires:
   IO::Scalar: 0
+  IPC::Run: 0
   Test::More: 0
   Test::XML: 0
 configure_requires:
@@ -18,7 +19,7 @@ name: TAP-Formatter-JUnit
 provides:
   TAP::Formatter::JUnit:
     file: lib/TAP/Formatter/JUnit.pm
-    version: 0.10
+    version: 0.11
   TAP::Formatter::JUnit::Result:
     file: lib/TAP/Formatter/JUnit/Result.pm
   TAP::Formatter::JUnit::Session:
@@ -31,4 +32,4 @@ requires:
   XML::Generator: 0
 resources:
   license: http://dev.perl.org/licenses/
-version: 0.10
+version: 0.11

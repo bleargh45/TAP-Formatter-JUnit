@@ -1,5 +1,9 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
+0.11    Wed Oct  1 13:26 PDT 2014
+    - Use "IPC::Run" instead of "IPC::Open2" in tests, to fix problems with
+      tests freezing on Windows.
+
 0.10    Mon Sep 29 12:38 PDT 2014
     - Switch from "Test::Differences" to "Test::XML", to eliminate failures due
       to differences in ordering of XML attributes.  Addresses RT#81552

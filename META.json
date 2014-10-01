@@ -17,6 +17,7 @@
       "build" : {
          "requires" : {
             "IO::Scalar" : "0",
+            "IPC::Run" : "0",
             "Test::More" : "0",
             "Test::XML" : "0"
          }
@@ -39,7 +40,7 @@
    "provides" : {
       "TAP::Formatter::JUnit" : {
          "file" : "lib/TAP/Formatter/JUnit.pm",
-         "version" : "0.10"
+         "version" : "0.11"
       },
       "TAP::Formatter::JUnit::Result" : {
          "file" : "lib/TAP/Formatter/JUnit/Result.pm"
@@ -54,5 +55,5 @@
          "http://dev.perl.org/licenses/"
       ]
    },
-   "version" : "0.10"
+   "version" : "0.11"
 }
