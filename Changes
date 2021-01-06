@@ -1,5 +1,8 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
+{{$NEXT}}
+    - Switch to Dist::Zilla for release management.
+
 0.11    Wed Oct  1 13:26 PDT 2014
     - Use "IPC::Run" instead of "IPC::Open2" in tests, to fix problems with
       tests freezing on Windows.

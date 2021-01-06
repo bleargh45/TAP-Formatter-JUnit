@@ -1,0 +1,110 @@
+# NAME
+
+TAP::Formatter::JUnit - Harness output delegate for JUnit output
+
+# SYNOPSIS
+
+On the command line, with `prove`:
+
+```
+prove --formatter TAP::Formatter::JUnit ...
+```
+
+Or, in your own scripts:
+
+```perl
+use TAP::Harness;
+my $harness = TAP::Harness->new( {
+    formatter_class => 'TAP::Formatter::JUnit',
+    merge => 1,
+} );
+$harness->runtests(@tests);
+```
+
+# DESCRIPTION
+
+**This code is currently in alpha state and is subject to change.**
+
+`TAP::Formatter::JUnit` provides JUnit output formatting for `TAP::Harness`.
+
+By default (e.g. when run with `prove`), the _entire_ test suite is gathered
+together into a single JUnit XML document, which is then displayed on `STDOUT`.
+You can, however, have individual JUnit XML files dumped for each individual
+test, by setting c<PERL\_TEST\_HARNESS\_DUMP\_TAP> to a directory that you would
+like the JUnit XML dumped to.  Note, that this will **also** cause
+`TAP::Harness` to dump the original TAP output into that directory as well (but
+IMHO that's ok as you've now got the data in two parsable formats).
+
+Timing information is included in the JUnit XML, _if_ you specified `--timer`
+when you ran `prove`.
+
+In standard use, "passing TODOs" are treated as failure conditions (and are
+reported as such in the generated JUnit).  If you wish to treat these as a
+"pass" and not a "fail" condition, setting `ALLOW_PASSING_TODOS` in your
+environment will turn these into pass conditions.
+
+The JUnit output generated is partial to being grokked by Hudson
+([http://hudson.dev.java.net/](http://hudson.dev.java.net/)).  That's the build tool I'm using at the
+moment and needed to be able to generate JUnit output for.
+
+# ATTRIBUTES
+
+- testsuites
+
+    List-ref of test suites that have been executed.
+
+- xml
+
+    An `XML::Generator` instance, to be used to generate XML output.
+
+# METHODS
+
+- **open\_test($test, $parser)**
+
+    Over-ridden `open_test()` method.
+
+    Creates a `TAP::Formatter::JUnit::Session` session, instead of a console
+    formatter session.
+
+- **summary($aggregate)**
+
+    Prints the summary report (in JUnit) after all tests are run.
+
+- **add\_testsuite($suite)**
+
+    Adds the given XML test `$suite` to the list of test suites that we've
+    executed and need to summarize.
+
+# AUTHOR
+
+Graham TerMarsch <cpan@howlingfrog.com>
+
+Many thanks to Andy Armstrong et al. for the **fabulous** set of tests in
+`Test::Harness`; they became the basis for the unit tests here.
+
+Other thanks go out to those that have provided feedback, comments, or patches:
+
+```
+Mark Aufflick
+Joe McMahon
+Michael Nachbaur
+Marc Abramowitz
+Colin Robertson
+Phillip Kimmey
+Dave Lambley
+```
+
+# COPYRIGHT
+
+Copyright 2008-2010, Graham TerMarsch.  All Rights Reserved.
+
+This is free software; you can redistribute it and/or modify it under the same
+terms as Perl itself.
+
+# SEE ALSO
+
+[TAP::Formatter::Console](https://metacpan.org/pod/TAP%3A%3AFormatter%3A%3AConsole),
+[TAP::Formatter::JUnit::Session](https://metacpan.org/pod/TAP%3A%3AFormatter%3A%3AJUnit%3A%3ASession),
+[http://hudson.dev.java.net/](http://hudson.dev.java.net/),
+[http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1mw.cgi/org.glite.testing.unit/config/JUnitXSchema.xsd?view=markup&content-type=text%2Fvnd.viewcvs-markup&revision=HEAD](http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1mw.cgi/org.glite.testing.unit/config/JUnitXSchema.xsd?view=markup&content-type=text%2Fvnd.viewcvs-markup&revision=HEAD),
+[http://confluence.atlassian.com/display/BAMBOO/JUnit+parsing+in+Bamboo](http://confluence.atlassian.com/display/BAMBOO/JUnit+parsing+in+Bamboo).
