@@ -10,6 +10,7 @@ use Storable qw(dclone);
 use File::Path qw(mkpath);
 use IO::File;
 use TAP::Formatter::JUnit::Result;
+use namespace::clean;
 
 has 'testcases' => (
     is      => 'rw',

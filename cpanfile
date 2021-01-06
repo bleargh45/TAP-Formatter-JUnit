@@ -1,6 +1,7 @@
 requires 'File::Slurp';
 requires 'Moose';
 requires 'MooseX::NonMoose';
+requires 'namespace::clean';
 requires 'TAP::Harness', '>= 3.12';
 requires 'XML::Generator';
 

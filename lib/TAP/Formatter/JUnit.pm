@@ -8,6 +8,7 @@ extends qw(
 
 use XML::Generator;
 use TAP::Formatter::JUnit::Session;
+use namespace::clean;
 
 our $VERSION = '0.12';
 
