@@ -9,7 +9,7 @@ extends qw(
 use XML::Generator;
 use TAP::Formatter::JUnit::Session;
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 has 'testsuites' => (
     is      => 'rw',
