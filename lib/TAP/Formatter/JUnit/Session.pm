@@ -369,6 +369,8 @@ sub _squeaky_clean {
 
 1;
 
+=for stopwords instantiation testcases
+
 =head1 NAME
 
 TAP::Formatter::JUnit::Session - Harness output delegate for JUnit output

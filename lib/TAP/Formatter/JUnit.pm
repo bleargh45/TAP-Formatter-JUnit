@@ -68,6 +68,8 @@ sub summary {
 
 1;
 
+=for stopwords xml testsuites TODO parseable
+
 =head1 NAME
 
 TAP::Formatter::JUnit - Harness output delegate for JUnit output
@@ -99,12 +101,12 @@ You can, however, have individual JUnit XML files dumped for each individual
 test, by setting C<PERL_TEST_HARNESS_DUMP_TAP> to a directory that you would
 like the JUnit XML dumped to.  Note, that this will B<also> cause
 C<TAP::Harness> to dump the original TAP output into that directory as well (but
-IMHO that's ok as you've now got the data in two parsable formats).
+IMHO that's ok as you've now got the data in two parseable formats).
 
 Timing information is included in the JUnit XML, I<if> you specified C<--timer>
 when you ran F<prove>.
 
-In standard use, "passing TODOs" are treated as failure conditions (and are
+In standard use, a "passing TODO" is treated as failure conditions (and is
 reported as such in the generated JUnit).  If you wish to treat these as a
 "pass" and not a "fail" condition, setting C<ALLOW_PASSING_TODOS> in your
 environment will turn these into pass conditions.
@@ -153,8 +155,8 @@ executed and need to summarize.
 
 Graham TerMarsch <cpan@howlingfrog.com>
 
-Many thanks to Andy Armstrong et al. for the B<fabulous> set of tests in
-C<Test::Harness>; they became the basis for the unit tests here.
+Many thanks to Andy Armstrong and all those involved for the B<fabulous> set of
+tests in C<Test::Harness>; they became the basis for the unit tests here.
 
 Other thanks go out to those that have provided feedback, comments, or patches:
 
