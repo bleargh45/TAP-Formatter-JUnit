@@ -38,5 +38,5 @@ tap2junit_name: {
 sub _tap2junit {
     my @args = @_;
     my $null = File::Spec->devnull();
-    system(qq{ $^X -Iblib/lib blib/script/tap2junit @args 2>$null });
+    system(qq{ $^X -Ilib script/tap2junit @args 2>$null });
 }
