@@ -55,11 +55,11 @@ sub open_test {
 }
 
 ###############################################################################
-# Subroutine:   summary($aggregate)
+# Subroutine:   summary()
 ###############################################################################
 # Prints the summary report (in JUnit) after all tests are run.
 sub summary {
-    my ($self, $aggregate) = @_;
+    my $self = shift;
     return if $self->silent();
 
     my @suites = @{$self->testsuites};
@@ -140,7 +140,7 @@ Over-ridden C<open_test()> method.
 Creates a C<TAP::Formatter::JUnit::Session> session, instead of a console
 formatter session.
 
-=item B<summary($aggregate)>
+=item B<summary()>
 
 Prints the summary report (in JUnit) after all tests are run.
 

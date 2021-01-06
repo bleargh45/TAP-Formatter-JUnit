@@ -3,6 +3,7 @@ Revision history for Perl extension TAP::Formatter::JUnit.
 {{$NEXT}}
     - Switch to Dist::Zilla for release management.
     - Various POD fixups; syntax, spelling
+    - Cleaned up and removed unused variables
 
 0.11    Wed Oct  1 13:26 PDT 2014
     - Use "IPC::Run" instead of "IPC::Open2" in tests, to fix problems with

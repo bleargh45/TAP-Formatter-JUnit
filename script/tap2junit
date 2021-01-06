@@ -77,7 +77,7 @@ foreach my $file (@tap_files) {
         $aggregator->stop();
 
         # Summarize the results (in JUnit)
-        $formatter->summary($aggregator);
+        $formatter->summary;
     };
     if ($@) {
         warn $@;

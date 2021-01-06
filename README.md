@@ -66,7 +66,7 @@ moment and needed to be able to generate JUnit output for.
     Creates a `TAP::Formatter::JUnit::Session` session, instead of a console
     formatter session.
 
-- **summary($aggregate)**
+- **summary()**
 
     Prints the summary report (in JUnit) after all tests are run.
 
