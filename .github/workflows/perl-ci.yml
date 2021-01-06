@@ -41,7 +41,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build.log
-          path: .perl-cpm/build.log
+          path: ~/.perl-cpm/build.log*
 
   test:
     name: "Perl v${{ matrix.perl-version }}"
@@ -96,4 +96,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: build.log
-          path: .cpanm/work/*/build.log
+          path: ~/.cpanm/work/*/build.log
