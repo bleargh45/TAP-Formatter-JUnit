@@ -7,13 +7,19 @@ TAP::Formatter::JUnit - Harness output delegate for JUnit output
 On the command line, with `prove`:
 
 ```
-prove --formatter TAP::Formatter::JUnit ...
+$ prove --formatter TAP::Formatter::JUnit ...
 ```
 
 Or, in your own scripts:
 
 ```perl
 use TAP::Harness;
+
+# What TAP output did we save from a previous run, with
+# PERL_TEST_HARNESS_DUMP_TAP=tap/
+my @tests = glob("tap/*.t");
+
+# Convert the TAP to JUnit
 my $harness = TAP::Harness->new( {
     formatter_class => 'TAP::Formatter::JUnit',
     merge => 1,
