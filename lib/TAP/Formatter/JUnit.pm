@@ -96,7 +96,7 @@ C<TAP::Formatter::JUnit> provides JUnit output formatting for C<TAP::Harness>.
 By default (e.g. when run with F<prove>), the I<entire> test suite is gathered
 together into a single JUnit XML document, which is then displayed on C<STDOUT>.
 You can, however, have individual JUnit XML files dumped for each individual
-test, by setting c<PERL_TEST_HARNESS_DUMP_TAP> to a directory that you would
+test, by setting C<PERL_TEST_HARNESS_DUMP_TAP> to a directory that you would
 like the JUnit XML dumped to.  Note, that this will B<also> cause
 C<TAP::Harness> to dump the original TAP output into that directory as well (but
 IMHO that's ok as you've now got the data in two parsable formats).
