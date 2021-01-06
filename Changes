@@ -1,6 +1,8 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
 {{$NEXT}}
+
+0.12      2021-01-05 21:23:07-08:00 America/Vancouver
     - Switch to Dist::Zilla for release management.
     - Various POD fixups; syntax, spelling, SYNOPSIS fixes
     - Cleaned up and removed unused variables
