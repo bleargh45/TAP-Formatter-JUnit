@@ -133,18 +133,18 @@ An C<XML::Generator> instance, to be used to generate XML output.
 
 =over
 
-=item B<open_test($test, $parser)>
+=item open_test($test, $parser)
 
 Over-ridden C<open_test()> method.
 
 Creates a C<TAP::Formatter::JUnit::Session> session, instead of a console
 formatter session.
 
-=item B<summary()>
+=item summary()
 
 Prints the summary report (in JUnit) after all tests are run.
 
-=item B<add_testsuite($suite)>
+=item add_testsuite($suite)
 
 Adds the given XML test C<$suite> to the list of test suites that we've
 executed and need to summarize.

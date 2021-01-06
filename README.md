@@ -59,18 +59,18 @@ moment and needed to be able to generate JUnit output for.
 
 # METHODS
 
-- **open\_test($test, $parser)**
+- open\_test($test, $parser)
 
     Over-ridden `open_test()` method.
 
     Creates a `TAP::Formatter::JUnit::Session` session, instead of a console
     formatter session.
 
-- **summary()**
+- summary()
 
     Prints the summary report (in JUnit) after all tests are run.
 
-- **add\_testsuite($suite)**
+- add\_testsuite($suite)
 
     Adds the given XML test `$suite` to the list of test suites that we've
     executed and need to summarize.
