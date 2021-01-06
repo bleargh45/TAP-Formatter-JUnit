@@ -109,8 +109,8 @@ terms as Perl itself.
 
 # SEE ALSO
 
-[TAP::Formatter::Console](https://metacpan.org/pod/TAP%3A%3AFormatter%3A%3AConsole),
-[TAP::Formatter::JUnit::Session](https://metacpan.org/pod/TAP%3A%3AFormatter%3A%3AJUnit%3A%3ASession),
-[http://hudson.dev.java.net/](http://hudson.dev.java.net/),
-[http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1mw.cgi/org.glite.testing.unit/config/JUnitXSchema.xsd?view=markup&content-type=text%2Fvnd.viewcvs-markup&revision=HEAD](http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1mw.cgi/org.glite.testing.unit/config/JUnitXSchema.xsd?view=markup&content-type=text%2Fvnd.viewcvs-markup&revision=HEAD),
-[http://confluence.atlassian.com/display/BAMBOO/JUnit+parsing+in+Bamboo](http://confluence.atlassian.com/display/BAMBOO/JUnit+parsing+in+Bamboo).
+- [TAP::Formatter::Console](https://metacpan.org/pod/TAP%3A%3AFormatter%3A%3AConsole)
+- [TAP::Formatter::JUnit::Session](https://metacpan.org/pod/TAP%3A%3AFormatter%3A%3AJUnit%3A%3ASession)
+- [Hudson home page](http://hudson.dev.java.net/)
+- [JUnitXSchema.xsd](http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1mw.cgi/org.glite.testing.unit/config/JUnitXSchema.xsd?view=markup&content-type=text%2Fvnd.viewcvs-markup&revision=HEAD)
+- [JUnit parsing in Bamboo](http://confluence.atlassian.com/display/BAMBOO/JUnit+parsing+in+Bamboo).

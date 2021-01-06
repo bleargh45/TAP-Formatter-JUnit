@@ -185,10 +185,18 @@ terms as Perl itself.
 
 =head1 SEE ALSO
 
-L<TAP::Formatter::Console>,
-L<TAP::Formatter::JUnit::Session>,
-L<http://hudson.dev.java.net/>,
-L<http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1mw.cgi/org.glite.testing.unit/config/JUnitXSchema.xsd?view=markup&content-type=text%2Fvnd.viewcvs-markup&revision=HEAD>,
-L<http://confluence.atlassian.com/display/BAMBOO/JUnit+parsing+in+Bamboo>.
+=over
+
+=item L<TAP::Formatter::Console>
+
+=item L<TAP::Formatter::JUnit::Session>
+
+=item L<Hudson home page|http://hudson.dev.java.net/>
+
+=item L<JUnitXSchema.xsd|http://jra1mw.cvs.cern.ch:8180/cgi-bin/jra1mw.cgi/org.glite.testing.unit/config/JUnitXSchema.xsd?view=markup&content-type=text%2Fvnd.viewcvs-markup&revision=HEAD>
+
+=item L<JUnit parsing in Bamboo|http://confluence.atlassian.com/display/BAMBOO/JUnit+parsing+in+Bamboo>.
+
+=back
 
 =cut
