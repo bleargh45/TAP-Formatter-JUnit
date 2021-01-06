@@ -68,7 +68,7 @@ sub summary {
 
 1;
 
-=for stopwords xml testsuites TODO parseable
+=for stopwords xml testsuites TODO parseable JUnitXSchema.xsd
 
 =head1 NAME
 
