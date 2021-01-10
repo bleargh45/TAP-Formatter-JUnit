@@ -77,6 +77,9 @@ jobs:
       - name: Unpack tarball
         run: tar -xz --strip-components 1 -f *.gz
 
+      - name: Perl version
+        run: perl -V
+
       - name: Install dependencies
         uses: perl-actions/install-with-cpanm@v1
         with:
