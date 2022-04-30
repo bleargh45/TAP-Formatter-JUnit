@@ -40,9 +40,11 @@ foreach my $test (@tests) {
     # Compare results (bearing in mind that some tests produce zero output, and
     # thus cannot be parsed as XML)
     if ($received || $expected) {
-        is_xml $received, $expected, $test;
+        is_xml $received, $expected, $test
+          or diag "GOT: ", explain($received);
     }
     else {
-        is $received, $expected, $test;
+        is $received, $expected, $test
+          or diag "GOT: ", explain($received);
     }
 }
