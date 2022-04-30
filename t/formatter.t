@@ -20,8 +20,10 @@ plan tests => scalar(@tests);
 # Run each of the tests in turn, and compare the output to the expected JUnit
 # output.
 foreach my $test (@tests) {
+    # Where is the JUnit output we should be expecting?
     (my $junit = $test) =~ s{/tests/}{/tests/junit/};
 
+    # Process TAP, and turn it into JUnit
     my $received = '';
     my $fh       = IO::Scalar->new(\$received);
     eval {
