@@ -37,6 +37,15 @@ foreach my $test (@tests) {
 
     my $expected = slurp($junit);
 
+    # OVER-RIDE: With Test::Harness prior to v3.44, the "bailout" test would
+    # result in zero/no output.  This was fixed in Test::Harness v3.44, but WE
+    # need to watch for and provide accommodations for newer/older versions.
+    if ($TAP::Harness::VERSION < 3.44) {
+      if ($test =~ /bailout/) {
+        $expected = '';
+      }
+    }
+
     # Compare results (bearing in mind that some tests produce zero output, and
     # thus cannot be parsed as XML)
     if ($received || $expected) {
