@@ -1,6 +1,8 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
 {{$NEXT}}
+
+0.15      2022-05-06 11:45:06-07:00 America/Vancouver
     - Use "version.pm" to compare version numbers, in "t/formatter.t".
       Addresses some CPANTester failures.
 
