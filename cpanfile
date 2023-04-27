@@ -1,4 +1,4 @@
-requires 'perl', '>= 5.008';
+requires 'perl', '>= 5.010';
 requires 'File::Slurp';
 requires 'Moose';
 requires 'MooseX::NonMoose';
