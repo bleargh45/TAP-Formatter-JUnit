@@ -227,7 +227,7 @@ sub close_test {
 
     my @tests = @{$self->testcases()};
     my %attrs = (
-        'name'     => _get_testsuite_name($self),
+        'name'     => $self->name,
         'tests'    => $testsrun,
         'failures' => $failures,
         'errors'   => $num_errors,
