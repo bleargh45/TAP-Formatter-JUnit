@@ -161,14 +161,14 @@ sub close_test {
     }
 
     # track time for teardown, if needed
-    if ($timer_enabled) {
-        my $duration = $self->parser->end_time - $queue->[-1]->time;
-        my $case     = $xml->testcase( {
-            'name' => _squeaky_clean('(teardown)'),
-            'time' => $duration,
-        } );
-        $self->add_testcase($case);
-    }
+    # if ($timer_enabled) {
+    #     my $duration = $self->parser->end_time - $queue->[-1]->time;
+    #     my $case     = $xml->testcase( {
+    #         'name' => _squeaky_clean('(teardown)'),
+    #         'time' => $duration,
+    #     } );
+    #     $self->add_testcase($case);
+    # }
 
     # collect up all of the captured test output
     my $captured = join '', map { $_->raw . "\n" } @{$queue};
