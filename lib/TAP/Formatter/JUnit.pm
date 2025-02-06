@@ -10,7 +10,7 @@ use XML::Generator;
 use TAP::Formatter::JUnit::Session;
 use namespace::clean;
 
-our $VERSION = '0.17';
+our $VERSION = '0.18';
 
 has 'testsuites' => (
     is      => 'rw',
