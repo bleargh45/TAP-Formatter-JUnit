@@ -26,6 +26,9 @@ jobs:
       - name: Perl version
         run: perl -V
 
+      - name: DZil version
+        run: dzil --version
+
       - name: Install CPM + Dist::Zilla Author Bundle
         uses: perl-actions/install-with-cpm@stable
         with:
