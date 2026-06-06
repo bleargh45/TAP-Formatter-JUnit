@@ -97,6 +97,9 @@ jobs:
       - name: Perl version
         run: perl -V
 
+      - name: Install Ubuntu dependencies
+        run: apt-get install libexpat1-dev
+
       - name: Install dependencies
         uses: perl-actions/install-with-cpanm@v1
         with:
