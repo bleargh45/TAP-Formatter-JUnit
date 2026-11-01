@@ -36,6 +36,11 @@ foreach my $test (@tests) {
         $harness->runtests($test);
     };
 
+    # The "timestamp" attribute records the wall-clock start of the suite and is
+    # therefore non-deterministic; strip it before comparing against the static
+    # fixtures.  Its presence and format are exercised separately in timer.t.
+    $received =~ s/\s+timestamp="[^"]*"//g;
+
     my $expected = slurp($junit);
 
     # OVER-RIDE: With Test::Harness prior to v3.43, the "bailout" test would

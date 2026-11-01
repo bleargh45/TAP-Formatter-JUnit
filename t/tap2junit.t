@@ -27,6 +27,11 @@ foreach my $test (@tests) {
     my $received = slurp($outfile);
     unlink $outfile;
 
+    # The "timestamp" attribute records the wall-clock start of the suite and is
+    # therefore non-deterministic; strip it before comparing against the static
+    # fixtures.  Its presence and format are exercised separately in timer.t.
+    $received =~ s/\s+timestamp="[^"]*"//g;
+
     my $expected = slurp($junit);
 
     # Compare results (bearing in mind that some tests produce zero output, and

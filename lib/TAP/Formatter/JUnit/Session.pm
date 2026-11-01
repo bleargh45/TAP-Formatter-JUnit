@@ -9,6 +9,7 @@ extends qw(
 use Storable qw(dclone);
 use File::Path qw(mkpath);
 use IO::File;
+use POSIX qw(strftime);
 use TAP::Formatter::JUnit::Result;
 use namespace::clean;
 
@@ -227,10 +228,11 @@ sub close_test {
 
     my @tests = @{$self->testcases()};
     my %attrs = (
-        'name'     => _get_testsuite_name($self),
-        'tests'    => $testsrun,
-        'failures' => $failures,
-        'errors'   => $num_errors,
+        'name'      => _get_testsuite_name($self),
+        'tests'     => $testsrun,
+        'failures'  => $failures,
+        'errors'    => $num_errors,
+        'timestamp' => _iso8601_timestamp($parser->start_time()),
         (
             $timer_enabled ? ('time' => $time) : ()
         ),
@@ -318,6 +320,18 @@ sub _get_testcase_name {
     my $name = join(' ', $test->number(), _clean_test_description($test));
     $name =~ s/\s+$//;
     return $name;
+}
+
+###############################################################################
+# Formats the given epoch seconds as a local-time ISO-8601 timestamp, including
+# a timezone offset (e.g. "2010-01-02T13:45:30-08:00").  Used for the
+# "timestamp" attribute on the testsuite, recording when the suite started.
+sub _iso8601_timestamp {
+    my $epoch = shift;
+    my $ts    = strftime('%Y-%m-%dT%H:%M:%S%z', localtime($epoch));
+    # "%z" yields the offset as "+hhmm"; insert a colon for ISO-8601 ("+hh:mm").
+    $ts =~ s/([-+]\d{2})(\d{2})$/$1:$2/;
+    return $ts;
 }
 
 ###############################################################################

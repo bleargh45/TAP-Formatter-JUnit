@@ -1,6 +1,11 @@
 Revision history for Perl extension TAP::Formatter::JUnit.
 
 {{$NEXT}}
+    - Emit a "timestamp" attribute on the testsuite, recording when the suite
+      started as a timezone-aware ISO-8601 instant (from
+      "$parser->start_time()").  This lets downstream JUnit consumers recover
+      the wall-clock start of a run, which prove's TAP parser knows but never
+      previously surfaced.
 
 0.17      2025-02-05 17:01:10-08:00 America/Vancouver
     - Bump minimum required Perl to 5.010; XML::Generator v1.11 now requires
