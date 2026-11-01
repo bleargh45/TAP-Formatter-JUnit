@@ -17,5 +17,10 @@ tap2junit_filter: {
     my ($out, $err);
     run \@cmd, \$tap, \$out, \$err or die $?;
 
+    # The "timestamp" attribute records the wall-clock start of the suite and is
+    # therefore non-deterministic; strip it before comparing against the static
+    # fixture.  Its presence and format are exercised separately in timer.t.
+    $out =~ s/\s+timestamp="[^"]*"//g;
+
     is_xml $out, $xml, 'results generated on STDOUT';
 }

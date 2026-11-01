@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 4;
+use Test::More tests => 5;
 use TAP::Harness;
 use IO::Scalar;
 use File::Slurp qw(write_file);
@@ -18,7 +18,9 @@ timer_disabled: {
         timer => 0,
     } );
     ok $results, 'got JUnit';
-    unlike $results, qr/time/ism, '... without any timing information';
+    # Match the "time=" duration attribute specifically; the always-present
+    # "timestamp=" attribute also contains the substring "time".
+    unlike $results, qr/time="/ism, '... without any timing information';
 }
 
 ###############################################################################
@@ -33,7 +35,23 @@ timer_enabled: {
         timer => 1,
     } );
     ok $results, 'got JUnit';
-    like $results, qr/time/ism, '... with timing information';
+    like $results, qr/time="/ism, '... with timing information';
+}
+
+###############################################################################
+# The testsuite always carries a "timestamp" recording when the suite started,
+# as a timezone-aware ISO-8601 instant, regardless of whether the timer is on.
+timestamp: {
+    my $test     = qq|
+        use Test::More tests => 1;
+        pass 'timestamped';
+    |;
+    my $results = run_test($test, {
+        timer => 0,
+    } );
+    like $results,
+        qr/timestamp="\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}[-+]\d{2}:\d{2}"/,
+        'testsuite has a timezone-aware ISO-8601 timestamp';
 }
 
 sub run_test {
